@@ -37,3 +37,4 @@ class GjoinApp(App):
         return route
 
 GjoinApp().run()
+#pega no meu pau
