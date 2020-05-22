@@ -14,7 +14,13 @@ class LoginPage(Screen):
         self.manager.current = 'register'
 
 class RegisterPage(Screen):
-    pass
+
+    def register_account(self):
+        pass
+    
+    def cancel_register(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'login'
 
 class GjoinApp(App):
     def build(self):
