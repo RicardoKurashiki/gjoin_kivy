@@ -1,3 +1,7 @@
+from kivy.config import Config
+# Fixar tamanho
+Config.set('graphics', 'resizable', False)
+
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
@@ -9,29 +13,37 @@ class LoginPage(Screen):
     # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
 
-    def go_register(self):
+    # TODO: Criar a funcionalidade de checar no DB a conta
+    def login(self):
         self.manager.transition.direction = 'left'
+        self.manager.current = 'home'
+
+    def go_register(self):
+        self.manager.transition.direction = 'up'
         self.manager.current = 'register'
 
 class RegisterPage(Screen):
 
+    # Empurra para o DB
     def register_account(self):
         pass
     
     def cancel_register(self):
-        self.manager.transition.direction = 'right'
+        self.manager.transition.direction = 'down'
         self.manager.current = 'login'
+
+class HomePage(Screen):
+    pass
 
 class GjoinApp(App):
     def build(self):
         # Tamanho da tela
         Window.size = (400, 600)
-        # Cor de fundo
-        Window.clearcolor = (0.5, 0.5, 0.5, 0.5)
         route = ScreenManager()
         # Rotas do aplicativo
         route.add_widget(LoginPage(name='login'))
         route.add_widget(RegisterPage(name='register'))
+        route.add_widget(HomePage(name='home'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
         return route

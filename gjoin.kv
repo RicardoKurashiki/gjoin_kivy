@@ -1,9 +1,15 @@
-#:kivy 1.10.0
-
 <LoginPage>:
+
+    Widget:
+        canvas:
+            Color:
+                rgba: [1, 1, 1, 0.5]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
     BoxLayout:
         orientation: 'vertical'
-
         Widget:
             canvas:
                 Rectangle:
@@ -12,20 +18,21 @@
                     source: root.imagem_app
 
         GridLayout:
-            rows: 3
+            rows: 2
             cols: 2
             padding: 10
             spacing: 10
+            pos_hint: {'x': 0, 'y': 0.75}
+            size_hint: (1, 0.75)
 
             Label:
-                text: '[b]Nome de usuario[/b]'
+                text: '[b]Email[/b]'
                 font_size: 24
                 markup: True
                 size: 75, 50
                 size_hint: 0.5, None
             TextInput:
-                id: username
-                text: ' '
+                id: log_email
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 16
                 multiline: False
@@ -39,52 +46,99 @@
                 size: 75, 50
                 size_hint: 0.5, None
             TextInput:
-                id: password
-                text: ' '
+                id: log_pass
+                password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 16
                 multiline: False
                 size: 75, 50
                 size_hint: 0.5, None
-        
+    
+        GridLayout:
+            rows: 1
+            cols: 2
+            padding: 10
+            spacing: 10
+            pos_hint: {'y': 0}
+            size_hint: (None, None)
+            
             Button:
                 id: login
                 text: 'LOGIN'
                 size_hint: (None, None)
                 height: 40
-                width: 150
-                pos_hint: {'x': 0.30, 'y': -0.5}
+                width: 185
+                on_release: root.login()
 
             Button:
                 text: 'REGISTRAR'
                 size_hint: (None, None)
                 height: 40
-                width: 150
-                pos_hint: {'x': 0.30, 'y': -0.5}
+                width: 185
                 on_release: root.go_register()
-
 
 <RegisterPage>:
     BoxLayout:
         orientation: 'vertical'
 
         GridLayout:
-            rows: 4
+            rows: 6
             cols: 2
             padding: 10
             spacing: 20
 
             Label:
-                text: '[b]Nome de usuario[/b]'
+                text: '[b]Nome completo[/b]'
                 font_size: 24
                 markup: True
                 size: 75, 50
                 size_hint: 0.5, None
             TextInput:
-                id: username
-                text: ' '
+                id: reg_name
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 16
+                font_size: 12
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+
+            Label:
+                text: '[b]Email[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: reg_email
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 12
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+
+            Label:
+                text: '[b]Universidade[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: reg_univ
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 12
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+
+            Label:
+                text: '[b]Curso[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: reg_curso
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 12
                 multiline: False
                 size: 75, 50
                 size_hint: 0.5, None
@@ -96,14 +150,14 @@
                 size: 75, 50
                 size_hint: 0.5, None
             TextInput:
-                id: password
-                text: ' '
+                id: reg_pass
+                password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 16
+                font_size: 12
                 multiline: False
                 size: 75, 50
                 size_hint: 0.5, None
-        
+
             Label:
                 text: '[b]Confirmar\nSenha[/b]'
                 font_size: 24
@@ -111,28 +165,40 @@
                 size: 75, 50
                 size_hint: 0.5, None
             TextInput:
-                id: confirm_pass
-                text: ' '
+                id: reg_confirmPass
+                password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 16
+                font_size: 12
                 multiline: False
                 size: 75, 50
                 size_hint: 0.5, None
-        
-            Button:
-                id: cancel
-                text: 'CANCELAR'
-                size_hint: (None, None)
-                height: 40
-                width: 150
-                pos_hint: {'x': 0.30, 'y': -0.5}
-                on_release: root.cancel_register()
-                
+
+        GridLayout:
+            rows: 1
+            cols: 2
+            padding: 10
+            spacing: 20
+            pos_hint: {'y': 0}
+            size_hint: (None, None)
+
             Button:
                 id: register
                 text: 'REGISTRAR'
                 size_hint: (None, None)
                 height: 40
-                width: 150
+                width: 180
                 pos_hint: {'x': 0.30, 'y': -0.5}
                 on_release: root.register_account()
+
+            Button:
+                id: reg_cancel
+                text: 'CANCELAR'
+                size_hint: (None, None)
+                height: 40
+                width: 180
+                pos_hint: {'x': 0.30, 'y': -0.5}
+                on_release: root.cancel_register()
+
+<HomePage>:
+    BoxLayout:
+        orientation: 'vertical'
