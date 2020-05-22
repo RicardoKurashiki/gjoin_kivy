@@ -8,7 +8,7 @@ from kivy.app import App
 class LoginPage(Screen):
     # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
-
+    
     def go_register(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'register'
