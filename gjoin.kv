@@ -1,0 +1,129 @@
+#:kivy 1.10.0
+
+<LoginPage>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Widget:
+            canvas:
+                Rectangle:
+                    pos: (100, 375)
+                    size: (200, 200)
+                    source: root.imagem_app
+
+        GridLayout:
+            rows: 3
+            cols: 2
+            padding: 10
+            spacing: 10
+
+            Label:
+                text: '[b]Nome de usuario[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: username
+                text: ' '
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 16
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+
+            Label:
+                text: '[b]Senha[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: password
+                text: ' '
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 16
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+        
+            Button:
+                id: login
+                text: 'LOGIN'
+                size_hint: (None, None)
+                height: 40
+                width: 150
+                pos_hint: {'x': 0.30, 'y': -0.5}
+
+            Button:
+                text: 'REGISTRAR'
+                size_hint: (None, None)
+                height: 40
+                width: 150
+                pos_hint: {'x': 0.30, 'y': -0.5}
+                on_release: root.go_register()
+
+
+<RegisterPage>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: '[b]REGISTRAR CONTA[/b]'
+            font_size: 32
+            markup: True
+
+        GridLayout:
+            rows: 3
+            cols: 2
+            padding: 10
+            spacing: 10
+
+            Label:
+                text: '[b]Nome de usuario[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: username
+                text: ' '
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 16
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+
+            Label:
+                text: '[b]Senha[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: password
+                text: ' '
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 16
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+        
+            Label:
+                text: '[b]Confirmar\nSenha[/b]'
+                font_size: 24
+                markup: True
+                size: 75, 50
+                size_hint: 0.5, None
+            TextInput:
+                id: confirm_pass
+                text: ' '
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 16
+                multiline: False
+                size: 75, 50
+                size_hint: 0.5, None
+        
+        Button:
+            id: register
+            text: 'Confirmar\nRegistro'
