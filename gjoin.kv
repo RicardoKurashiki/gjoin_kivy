@@ -1,5 +1,4 @@
 <LoginPage>:
-
     Widget:
         canvas:
             Color:
@@ -7,7 +6,6 @@
             Rectangle:
                 size: self.size
                 pos: self.pos
-
     BoxLayout:
         orientation: 'vertical'
         Widget:
@@ -16,7 +14,6 @@
                     pos: (100, 375)
                     size: (200, 200)
                     source: root.imagem_app
-
         GridLayout:
             rows: 2
             cols: 2
@@ -26,7 +23,7 @@
             size_hint: (1, 0.75)
 
             Label:
-                text: '[b]Email[/b]'
+                text: '[b]E-mail[/b]'
                 font_size: 24
                 markup: True
                 size: 75, 50
@@ -78,6 +75,13 @@
                 on_release: root.go_register()
 
 <RegisterPage>:
+  Widget:
+        canvas:
+            Color:
+                rgba: [1, 1, 1, 0.5]
+            Rectangle:
+                size: self.size
+                pos: self.pos
     BoxLayout:
         orientation: 'vertical'
 
@@ -102,7 +106,7 @@
                 size_hint: 0.5, None
 
             Label:
-                text: '[b]Email[/b]'
+                text: '[b]E-mail[/b]'
                 font_size: 24
                 markup: True
                 size: 75, 50
@@ -142,7 +146,7 @@
                 multiline: False
                 size: 75, 50
                 size_hint: 0.5, None
-
+                
             Label:
                 text: '[b]Senha[/b]'
                 font_size: 24
