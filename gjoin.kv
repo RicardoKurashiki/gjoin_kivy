@@ -2,7 +2,7 @@
     Widget:
         canvas:
             Color:
-                rgba: [1, 1, 1, 0.5]
+                rgba: [0.25, 0.2, 1, 1]
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -10,6 +10,8 @@
         orientation: 'vertical'
         Widget:
             canvas:
+                Color:
+                    rgba: [1,1,1,0.9]
                 Rectangle:
                     pos: (100, 375)
                     size: (200, 200)
@@ -75,10 +77,10 @@
                 on_release: root.go_register()
 
 <RegisterPage>:
-  Widget:
+    Widget:
         canvas:
             Color:
-                rgba: [1, 1, 1, 0.5]
+                rgba: [0.25, 0.35, 1, 1]
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -206,3 +208,56 @@
 <HomePage>:
     BoxLayout:
         orientation: 'vertical'
+        Button:
+            text: '<<'
+            on_release: root.go_back()
+        Button:
+            text: 'Chat'
+            on_release: root.go_to_chat()
+
+<ChatPage>:
+    orientation: 'vertical'
+
+    Widget:
+        canvas:
+            Color:
+                rgba: [0.25, 0.2, 1, 1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    BoxLayout:
+        orientation: 'horizontal'
+        Button:
+            size_hint: (0.15, 0.1)
+            pos_hint: {'y': 0.87}
+            text: '<<'
+            on_release: root.exit_chat()
+            
+        Label:
+            size_hint: (0.9, None)
+            pos_hint: {'y': 0.835}
+            text: '[b]Sala de bate-papo[/b]'
+            markup: True
+            font_size: 24
+    
+    BoxLayout:
+        orientation: 'vertical'
+
+        Widget:
+            canvas:
+                Color:
+                    rgba: [0,0,0,0.8]
+                Rectangle:
+                    size: (375, 435)
+                    pos: 12, 80
+        BoxLayout:
+            orientation: 'horizontal'
+            TextInput:
+                padding: [10, 0.5*(self.height - self.line_height)]
+                font_size: 20
+                size: 75, 50
+                size_hint: 0.7, 0.25
+            Button:
+                text: '>'
+                size: 75, 50
+                size_hint: 0.15, 0.25

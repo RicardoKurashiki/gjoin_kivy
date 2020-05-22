@@ -10,6 +10,9 @@ from kivy.app import App
 
 
 class LoginPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
 
@@ -23,7 +26,9 @@ class LoginPage(Screen):
         self.manager.current = 'register'
 
 class RegisterPage(Screen):
-
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
     # Empurra para o DB
     def register_account(self):
         pass
@@ -33,7 +38,21 @@ class RegisterPage(Screen):
         self.manager.current = 'login'
 
 class HomePage(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def go_back(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'login'
+    
+    def go_to_chat(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'chat'
+
+class ChatPage(Screen):
+    def exit_chat(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
 
 class GjoinApp(App):
     def build(self):
@@ -44,6 +63,7 @@ class GjoinApp(App):
         route.add_widget(LoginPage(name='login'))
         route.add_widget(RegisterPage(name='register'))
         route.add_widget(HomePage(name='home'))
+        route.add_widget(ChatPage(name='chat'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
         return route
