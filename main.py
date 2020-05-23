@@ -38,8 +38,11 @@ class RegisterPage(Screen):
         self.manager.current = 'login'
 
 class HomePage(Screen):
+        # Logo do app
+    imagem_app = StringProperty('gjoinLogo.png')
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
 
     def go_back(self):
         self.manager.transition.direction = 'right'
