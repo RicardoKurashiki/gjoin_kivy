@@ -120,6 +120,9 @@ class RegisterPage(Screen):
 class HomePage(Screen):
         # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
+
+    # Lupa
+    Lupa = StringProperty('lupa.png')
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
