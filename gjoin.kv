@@ -236,8 +236,26 @@
                 text: "Logout"
                 size_hint: (None,None)
                 height: 50
-                width: 50
+                width: 60
                 on_release: root.go_back()
+     
+            Button:
+                pos: (110,550)
+                id: criar_gp
+                text: "Criar Grupo"
+                size_hint: (None,None)
+                on_release: root.create_gp
+                height: 50
+                width: 90
+            Button:
+                pos: (200, 550)
+                id: entrar_gp
+                text: "Entrar"
+                size_hint: (None,None) 
+                on_release: root.enter_gp
+                height: 50
+                width: 100
+
 
                 
 
