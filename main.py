@@ -7,7 +7,7 @@ from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.app import App
-
+import sqlite3
 
 class LoginPage(Screen):
     def __init__(self, **kwargs):
@@ -31,7 +31,23 @@ class RegisterPage(Screen):
         
     # Empurra para o DB
     def register_account(self):
-        pass
+        class Registro(object):
+            def __init__(self, nome, email, universidade, curso, senha, confsenha):
+                self.nome = nome
+                self.email = email
+                self.universidade = universidade
+                self.curso = curso
+                self.senha = senha
+                self.confsenha = confsenha
+
+        NovReg = Registro(nome = self.ids.reg_name.text, email = self.ids.reg_email.text, universidade = self.ids.reg_univ.text, curso = self.ids.reg_curso.text, senha = self.ids.reg_pass.text, confsenha = self.ids.reg_confirmPass.text) # Criação do novo registro
+        conn = sqlite3.connect('BANCO.db') # Conexão com o DB
+        cursor = conn.cursor()
+
+        cursor.execute("""INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) """, (NovReg.nome, NovReg.email, NovReg.senha, NovReg.universidade, NovReg.curso))
+
+        conn.commit()
+        conn.close()
     
     def cancel_register(self):
         self.manager.transition.direction = 'down'
