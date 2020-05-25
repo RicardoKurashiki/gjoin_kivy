@@ -223,13 +223,23 @@
                     pos:(0,550)
                     size:(50,50)
                     source: root.imagem_app
+        BoxLayout:
+            size: (100,10)
+            orientation: 'vertical'
+            Widget:
+                canvas:
+                    Color:
+                        rgba: [0,0,0,1]
+                    Rectangle:
+                        pos:self.pos
+                        size:self.size
         Button:
             pos:(50,550)
             id: logout
             text: "Logout"
             size_hint: (None,None)
             height: 30
-            widht : 30
+            width: 100
             on_release: root.go_back()
 
                 
