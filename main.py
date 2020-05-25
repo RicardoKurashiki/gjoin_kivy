@@ -81,7 +81,7 @@ class RegisterPage(Screen):
 
         elif self.ids.reg_pass.text != self.ids.reg_confirmPass.text:
             conf = 0
-            print('As senhas digitadas precisam ser iguais!')
+            print('Senha não confere')
         
         elif conf == 1 and check(self.ids.reg_email.text) == 1:
             class Registro(object):
