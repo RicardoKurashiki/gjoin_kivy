@@ -244,31 +244,133 @@
                 id: criar_gp
                 text: "Criar Grupo"
                 size_hint: (None,None)
-                on_release: root.create_gp
+                on_release: root.go_to_create()
                 height: 50
                 width: 90
             Button:
                 pos: (200, 550)
                 id: entrar_gp
-                text: "Entrar"
+                text: "Grupos"
                 size_hint: (None,None) 
-                on_release: root.enter_gp
+                on_release: root.go_to_group()
                 height: 50
                 width: 100
             Button:
                 pos: (350, 550)
-                text: "busca"
+                text: "Busca"
                 id: search
                 size_hint:(None,None)
-                on_release: root.search
                 height: 50
                 width: 50
+
+<CreatePage>:
+    Widget:
+        canvas:
+            Color:
+                rgba: [1,1,1,0.8]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+<GroupPage>:
+    Widget:
+        canvas:
+            Color:
+                rgba: [0.25, 0.2, 1, 1]
+            Rectangle:
+                size: self.size
+                pos: self.pos 
+    BoxLayout:
+        orientation: 'vertical'
+        size: self.size
+        pos: self.pos
+
+        BoxLayout:
+            size_hint: (None, None)
+            height: 50
+            width: 400
+
+            Button:
+                text: 'Voltar'
+                size_hint: (None,None)
+                height: 40
+                width: 60
+                on_release: root.go_back()
+
+            Label:
+                text: '[b]Seus grupos[/b]'
+                markup: True
+                font_size: 30
+
+        BoxLayout:
+            size_hint: (None,None)
+            height: 550
+            width: 400
+
+            GridLayout:
+                rows: 6
+                cols: 2
+                padding: [20,30]
+
+                Button:
+                    text: 'Grupo 1'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button:
+                    text: 'Grupo 2'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button:
+                    text: 'Grupo 3'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button:
+                    text: 'Grupo 4'
+                    font_size: 15
+                    on_release: root.go_to_chat()
                 
+                Button:
+                    text: 'Grupo 5'
+                    font_size: 15
+                    on_release: root.go_to_chat()
 
+                Button:
+                    text: 'Grupo 6'
+                    font_size: 15
+                    on_release: root.go_to_chat()
 
-
+                Button:
+                    text: 'Grupo 7'
+                    font_size: 15
+                    on_release: root.go_to_chat()
                 
+                Button:
+                    text: 'Grupo 8'
+                    font_size: 15
+                    on_release: root.go_to_chat()
 
+                Button:
+                    text: 'Grupo 9'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button:
+                    text: 'Grupo 10'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button: 
+                    text: 'Grupo 11'
+                    font_size: 15
+                    on_release: root.go_to_chat()
+
+                Button:
+                    text: 'Grupo 12'
+                    font_size: 15
+                    on_release: root.go_to_chat()
 
 <ChatPage>:
     orientation: 'vertical'
@@ -285,7 +387,7 @@
         Button:
             size_hint: (0.15, 0.1)
             pos_hint: {'y': 0.87}
-            text: '<<'
+            text: 'Voltar'
             on_release: root.exit_chat()
             
         Label:
