@@ -344,13 +344,75 @@
                     on_release: root.go_to_chat()
 
 <CreatePage>:
+    orientation: "vertical"
     Widget:
         canvas:
             Color:
-                rgba: [1,1,1,0.8]
+                rgba: [0.25, 0.2, 1, 1]
             Rectangle:
                 size: self.size
                 pos: self.pos
+        Button:
+            text: "Voltar"
+            on_release: root.voltar()
+            size: (50,40)
+            pos: (0, 560)
+    GridLayout:
+        pos: 0,0
+        size: 400, 550
+        cols : 2
+        padding : 10
+        spacing : 20
+        
+        
+        Label:
+            text: "Nome Do grupo"
+            font_size: 24
+            markup: True
+            size: 150,50
+
+         
+        TextInput:
+            text: " "
+            id: nome_novo_grupo
+            size: 150,50
+        Label:
+            text: 'Faculdade'
+            font_size: 24
+            markup: True
+        TextInput:
+            text: ""
+            id: faculdade_novo_grupo
+
+        Label:
+            text: "Materia"
+            font_size: 24
+            markup: True
+            
+
+        TextInput:
+            text : " "
+            id: materia_novo_grupo
+            
+        Label:
+            text: 'Horario'
+            font_size: 24
+            markup: True
+
+        TextInput:
+            text: ""
+            id: horario_novo_grupo
+        
+        Button:
+            text: 'Criar grupo'
+            on_release: root.criar_grupo()
+
+        
+        
+
+
+        
+
 
 <GroupPage>:
     Widget:

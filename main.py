@@ -185,7 +185,11 @@ class GroupPage(Screen):
 
 
 class CreatePage(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def voltar(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
 
 # -------- CONSTRUINDO APP --------
 
