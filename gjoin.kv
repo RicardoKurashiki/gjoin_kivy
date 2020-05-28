@@ -373,16 +373,20 @@
 
          
         TextInput:
-            text: " "
             id: nome_novo_grupo
+            padding: [10, 0.5*(self.height - self.line_height)]
+            font_size: 16
+            multiline: False
             size: 150,50
         Label:
             text: 'Faculdade'
             font_size: 24
             markup: True
         TextInput:
-            text: ""
             id: faculdade_novo_grupo
+            padding: [10, 0.5*(self.height - self.line_height)]
+            font_size: 16
+            multiline: False
 
         Label:
             text: "Materia"
@@ -391,8 +395,10 @@
             
 
         TextInput:
-            text : " "
             id: materia_novo_grupo
+            padding: [10, 0.5*(self.height - self.line_height)]
+            font_size: 16
+            multiline: False
             
         Label:
             text: 'Horario'
@@ -400,8 +406,10 @@
             markup: True
 
         TextInput:
-            text: ""
             id: horario_novo_grupo
+            padding: [10, 0.5*(self.height - self.line_height)]
+            font_size: 16
+            multiline: False
         
         Button:
             text: 'Criar grupo'

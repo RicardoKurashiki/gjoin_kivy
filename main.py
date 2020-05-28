@@ -153,6 +153,10 @@ class HomePage(Screen):
     def go_to_group(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'group'
+    
+    def go_to_chat(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'chat'
 
     def go_to_create(self):
         self.manager.transition.direction = 'left'
@@ -164,7 +168,7 @@ class HomePage(Screen):
 class ChatPage(Screen):
     def exit_chat(self):
         self.manager.transition.direction = 'right'
-        self.manager.current = 'group'
+        self.manager.current = 'home'
 
 # -------- SEUS GRUPOS --------
 
@@ -172,10 +176,6 @@ class ChatPage(Screen):
 class GroupPage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    def go_to_chat(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'chat'
     
     def go_back(self):
         self.manager.transition.direction = 'right'
