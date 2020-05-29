@@ -38,10 +38,18 @@ class LoginPage(Screen):
     # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
 
-    # TODO: Criar a funcionalidade de checar no DB a conta
     def login(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'home'
+        user = self.ids.log_email.text
+        password = self.ids.log_pass.text
+        conn = sqlite3.connect('BANCO.db')
+        db = conn.cursor()
+        db.execute('SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
+        if db.fetchall():
+            self.manager.transition.direction = 'left'
+            self.manager.current = 'home'
+        else:
+            print('O usuário e senha não são válidos!')
+        conn.close()
 
     def go_register(self):
         self.manager.transition.direction = 'up'
