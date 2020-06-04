@@ -8,7 +8,7 @@ import sqlite3
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+import kivy.properties as kvProps
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.button import Button
 from kivy.lang.builder import Builder
@@ -36,7 +36,7 @@ class LoginPage(Screen):
         super().__init__(**kwargs)
 
     # Logo do app
-    imagem_app = StringProperty('gjoinLogo.png')
+    imagem_app = kvProps.StringProperty('gjoinLogo.png')
 
     def login(self):
         user = self.ids.log_email.text
@@ -146,10 +146,10 @@ class RegisterPage(Screen):
 
 class HomePage(Screen):
     # Logo do app
-    imagem_app = StringProperty('gjoinLogo.png')
+    imagem_app = kvProps.StringProperty('gjoinLogo.png')
 
     # Lupa
-    Lupa = StringProperty('lupa.png')
+    Lupa = kvProps.StringProperty('lupa.png')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
