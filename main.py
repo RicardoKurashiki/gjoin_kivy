@@ -1,24 +1,35 @@
+# -------- IMPORTAÇÕES --------
 from kivy.config import Config
 # Fixar tamanho
 Config.set('graphics', 'resizable', False)
 
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import StringProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
-from kivy.app import App
-import sqlite3
 import re
+import sqlite3
+from kivy.app import App
+from kivy.core.window import Window
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import StringProperty
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.button import Button
+from kivy.lang.builder import Builder
+
+
+# -------- CÓDIGO PRINCIPAL --------
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-def check(email):  
+
+
+def check(email):
     conf = 1
-    if(re.search(regex,email)):  
+    if(re.search(regex, email)):
         conf = 1
-    else:  
+    else:
         print('Insira um e-mail válido')
         conf = 0
     return conf
+
+# -------- TELA LOGIN --------
+
 
 class LoginPage(Screen):
     def __init__(self, **kwargs):
@@ -27,20 +38,30 @@ class LoginPage(Screen):
     # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
 
-    # TODO: Criar a funcionalidade de checar no DB a conta
     def login(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'home'
+        user = self.ids.log_email.text
+        password = self.ids.log_pass.text
+        conn = sqlite3.connect('BANCO.db')
+        db = conn.cursor()
+        db.execute('SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
+        if db.fetchall():
+            self.manager.transition.direction = 'left'
+            self.manager.current = 'home'
+        else:
+            print('O usuário e senha não são válidos!')
+        conn.close()
 
     def go_register(self):
         self.manager.transition.direction = 'up'
         self.manager.current = 'register'
 
+# -------- TELA REGISTRAR --------
+
 
 class RegisterPage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
+
     # Empurra para o DB
     def register_account(self):
         conf = 1
@@ -62,7 +83,7 @@ class RegisterPage(Screen):
         elif self.ids.reg_email.text == '':
             conf = 0
             print('Insira um email')
-        
+
         elif self.ids.reg_univ.text == '':
             conf = 0
             print('Insira uma universidade')
@@ -75,14 +96,14 @@ class RegisterPage(Screen):
             conf = 0
             print('Insira uma senha')
 
-        elif self.ids.reg_confirmPass.text ==  '':
+        elif self.ids.reg_confirmPass.text == '':
             conf = 0
             print('Insira uma confirmação de senha')
 
         elif self.ids.reg_pass.text != self.ids.reg_confirmPass.text:
             conf = 0
             print('Senha não confere')
-        
+
         elif conf == 1 and check(self.ids.reg_email.text) == 1:
             class Registro(object):
                 def __init__(self, nome, email, universidade, curso, senha, confsenha):
@@ -93,14 +114,17 @@ class RegisterPage(Screen):
                     self.senha = senha
                     self.confsenha = confsenha
 
-            NovReg = Registro(nome = self.ids.reg_name.text, email = self.ids.reg_email.text, universidade = self.ids.reg_univ.text, curso = self.ids.reg_curso.text, senha = self.ids.reg_pass.text, confsenha = self.ids.reg_confirmPass.text) # Criação do novo registro
-            conn = sqlite3.connect('BANCO.db') # Conexão com o DB
+            NovReg = Registro(nome=self.ids.reg_name.text, email=self.ids.reg_email.text, universidade=self.ids.reg_univ.text,
+                              curso=self.ids.reg_curso.text, senha=self.ids.reg_pass.text, confsenha=self.ids.reg_confirmPass.text)  # Criação do novo registro
+            conn = sqlite3.connect('BANCO.db')  # Conexão com o DB
             cursor = conn.cursor()
 
-            cursor.execute("""INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) """, (NovReg.nome, NovReg.email, NovReg.senha, NovReg.universidade, NovReg.curso))
+            cursor.execute("""INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) """,
+                           (NovReg.nome, NovReg.email, NovReg.senha, NovReg.universidade, NovReg.curso))
 
             conn.commit()
-            print('------------------------------------  Registrado ------------------------------------')
+            print(
+                '------------------------------------  Registrado ------------------------------------')
             conn.close()
 
             self.manager.transition.direction = 'down'
@@ -117,27 +141,66 @@ class RegisterPage(Screen):
         self.manager.transition.direction = 'down'
         self.manager.current = 'login'
 
+# -------- TELA PRINCIPAL --------
+
+
 class HomePage(Screen):
-        # Logo do app
+    # Logo do app
     imagem_app = StringProperty('gjoinLogo.png')
 
     # Lupa
     Lupa = StringProperty('lupa.png')
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def go_back(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'login'
+
+    def go_to_group(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'group'
     
     def go_to_chat(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'chat'
 
+    def go_to_create(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'create'
+
+# -------- TELA DE CHAT --------
+
+
 class ChatPage(Screen):
     def exit_chat(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
+
+# -------- SEUS GRUPOS --------
+
+
+class GroupPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def go_back(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+
+# -------- CRIAR GRUPO --------
+
+
+class CreatePage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def voltar(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+
+# -------- CONSTRUINDO APP --------
+
 
 class GjoinApp(App):
     def build(self):
@@ -148,9 +211,14 @@ class GjoinApp(App):
         route.add_widget(LoginPage(name='login'))
         route.add_widget(RegisterPage(name='register'))
         route.add_widget(HomePage(name='home'))
+        route.add_widget(GroupPage(name='group'))
         route.add_widget(ChatPage(name='chat'))
+        route.add_widget(CreatePage(name='create'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
         return route
+
+# -------- INICIANDO APP --------
+
 
 GjoinApp().run()
