@@ -221,12 +221,34 @@ class CreatePage(Screen):
         # (NOME, CURSO, HORA, sla)
         global isListaNew
         # A lista tem que ser substituida pelo banco de dados
-        lista.append(self.ids.nome_novo_grupo.text)
-        # Validação para não criar grupos repetidos
-        isListaNew = True
-        self.ids.nome_novo_grupo.text = ''
-        self.manager.transition.direction = 'right'
-        self.manager.current = 'home'
+        # ------ VARIAVEIS PARA A VERIFICAÇÃO -------
+        self.nomeGrupo = self.ids.nome_novo_grupo.text
+        self.faculGrupo = self.ids.faculdade_novo_grupo.text
+        self.matGrupo = self.ids.materia_novo_grupo.text
+        self.horGrupo = self.ids.horario_novo_grupo.text
+        # Caso esteja tudo preenchido
+        if(self.nomeGrupo and self.faculGrupo and self.matGrupo and self.horGrupo) != '':
+            lista.append(self.nomeGrupo)
+            # Evitar criar grupo acidentalmente
+            isListaNew = True
+            self.ids.nome_novo_grupo.text = ''
+            self.ids.faculdade_novo_grupo.text = ''
+            self.ids.materia_novo_grupo.text = ''
+            self.ids.horario_novo_grupo.text = ''
+            self.manager.transition.direction = 'right'
+            self.manager.current = 'home'
+        # Faltando nome para o grupo
+        if self.nomeGrupo == '':
+            print('Informe um nome para o grupo')
+        # Faltando faculdade para o grupo
+        if self.faculGrupo == '':
+            print('Informe uma faculdade para o grupo')
+        # Faltando materia para o grupo
+        if self.matGrupo == '':
+            print('Informe uma matéria para o grupo')
+        # Faltando horario para o grupo
+        if self.horGrupo == '':
+            print('Informe um horário para o grupo')
 
 # -------- CONSTRUINDO APP --------
 
