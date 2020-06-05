@@ -152,7 +152,6 @@ class RegisterPage(Screen):
 
 # -------- TELA PRINCIPAL --------
 
-
 class HomePage(Screen):
     # Logo do app
     imagem_app = kvProps.StringProperty('gjoinLogo.png')
@@ -189,9 +188,7 @@ class HomePage(Screen):
         self.manager.transition.direction = 'left'
         self.manager.current = 'search'
 
-
 # -------- TELA DE CHAT --------
-
 
 class ChatPage(Screen):
     def __init__(self, **kwargs):
@@ -212,9 +209,7 @@ class ChatPage(Screen):
             self.ids.chat_de_texto.add_widget(
                 Label(text=msg[-1], font_size=20, size_hint_y=None, height=30))
 
-
 # -------- CRIAR GRUPO --------
-
 
 class CreatePage(Screen):
     def __init__(self, **kwargs):
@@ -260,6 +255,19 @@ class CreatePage(Screen):
         if self.horGrupo == '':
             print('Informe um horário para o grupo')
 
+# -------- PROCURAR GRUPO ---------
+
+class SearchPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def returnhome(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+    
+    def pesquisa(self):
+        pass
+
 # -------- CONSTRUINDO APP --------
 
 
@@ -274,7 +282,7 @@ class GjoinApp(App):
         route.add_widget(HomePage(name='home'))
         route.add_widget(ChatPage(name='chat'))
         route.add_widget(CreatePage(name='create'))
-        route.add_widget(SearchGroup(name='search'))
+        route.add_widget(SearchPage(name = 'search'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
         return route

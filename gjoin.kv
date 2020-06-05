@@ -244,35 +244,34 @@
                     source: root.imagem_app
         Widget:
             Button:
-                pos:(50,550)
+                pos:(50,570)
                 id: logout
                 text: "Logout"
                 size_hint: (None,None)
-                height: 50
+                height: 30
                 width: 60
                 on_release: root.go_back()
      
             Button:
-                pos: (110,550)
+                pos: (110,570)
                 id: criar_gp
                 text: "Criar Grupo"
                 size_hint: (None,None)
                 on_release: root.go_to_create()
-                height: 50
+                height: 30
                 width: 90
 
             Button:
-                pos: (350, 550)
-                text: "Busca"
+                pos: (340, 570)
+                text: "Buscar"
                 id: search
                 size_hint:(None,None)
                 on_release: root.go_to_search()
-                height: 50
-                width: 50
+                height: 30
+                width: 60
             
 
 <CreatePage>:
-    orientation: 'vertical'
     Widget:
         canvas:
             Color:
@@ -280,70 +279,88 @@
             Rectangle:
                 size: self.size
                 pos: self.pos
-
-    GridLayout:
-        pos: 0,0
-        size: 400, 200
-        cols : 2
-        padding : 10
-        spacing : 50
-
+    Widget:
         Button:
+            pos:(0,570)
             text: "Voltar"
+            size_hint: (None,None)
+            height: 30
+            width: 60
             on_release: root.voltar()
-            size: (50,40)
-            pos: (0, 560)
-        Label:
-            text: ''
-        Label:
-            text: "Nome Do grupo"
-            font_size: 20
-            markup: True
-            size: 150,50
+    GridLayout:
+        pos: (0,-150)
+        rows: 4
+        cols: 2
+        padding: 10
+        spacing: 20
 
+        Label:
+            text: '[b]Nome do Grupo[/b]'
+            font_size: 24
+            markup: True
+            size: 75, 50
+            size_hint: 0.5, None
         TextInput:
             id: nome_novo_grupo
+            text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 16
+            font_size: 12
             multiline: False
-            size: 150,10
+            size: 75, 50
+            size_hint: 0.5, None
+
         Label:
-            text: 'Faculdade'
-            font_size: 20
+            text: '[b]Faculdade[/b]'
+            font_size: 24
             markup: True
+            size: 75, 50
+            size_hint: 0.5, None
         TextInput:
             id: faculdade_novo_grupo
+            text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 16
+            font_size: 12
             multiline: False
+            size: 75, 50
+            size_hint: 0.5, None
 
         Label:
-            text: "Materia"
-            font_size: 20
+            text: '[b]Materia[/b]'
+            font_size: 24
             markup: True
-            
-
+            size: 75, 50
+            size_hint: 0.5, None
         TextInput:
             id: materia_novo_grupo
+            text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 16
+            font_size: 12
             multiline: False
-            
-        Label:
-            text: 'Horario'
-            font_size: 20
-            markup: True
+            size: 75, 50
+            size_hint: 0.5, None
 
+        Label:
+            text: '[b]Horario[/b]'
+            font_size: 24
+            markup: True
+            size: 75, 50
+            size_hint: 0.5, None
         TextInput:
             id: horario_novo_grupo
-            padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 16
-            multiline: False
-        Button:
-            text: 'Criar grupo'
-            on_release: root.criar_grupo()
-        Label:
             text: ''
+            padding: [10, 0.5*(self.height - self.line_height)]
+            font_size: 12
+            multiline: False
+            size: 75, 50
+            size_hint: 0.5, None
+    Widget:
+        Button:
+            pos:(300,570)
+            text: "Criar Grupo"
+            size_hint: (None,None)
+            height: 30
+            width: 100
+            on_release: root.criar_grupo()
 
 <ChatPage>:
     orientation: 'vertical'
@@ -404,3 +421,38 @@
                 size: 75, 50
                 size_hint: 0.15, 0.75
                 on_release: root.send_message()
+
+<SearchPage>:
+    Widget:
+        canvas:
+            Color:
+                rgba: [0.25, 0.2, 1, 1]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 5
+        padding: 1
+
+        BoxLayout:
+            height: 30
+            size_hint_y: None
+            Button:
+                size_hint_x: None
+                width: 60
+                on_release: root.returnhome()
+                text: 'Voltar'
+            TextInput:
+                id: txBusca
+                text: ''
+            Button:
+                size_hint_x: None
+                width: 60
+                on_release: root.pesquisa()
+                text: 'Buscar'
+        BoxLayout:
+            text: ''
+
+
+            
