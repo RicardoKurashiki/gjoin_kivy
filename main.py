@@ -2,17 +2,16 @@
 from kivy.config import Config
 # Fixar tamanho
 Config.set('graphics', 'resizable', False)
-
-import re
-import sqlite3
-from kivy.app import App
-from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
-import kivy.properties as kvProps
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.lang.builder import Builder
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.screenmanager import Screen, ScreenManager
+import kivy.properties as kvProps
+from kivy.uix.boxlayout import BoxLayout
+from kivy.core.window import Window
+from kivy.app import App
+import sqlite3
+import re
 
 
 # -------- CÓDIGO PRINCIPAL --------
@@ -28,6 +27,7 @@ def check(email):
         print('Insira um e-mail válido')
         conf = 0
     return conf
+
 
 lista = []
 msg = []
@@ -48,7 +48,8 @@ class LoginPage(Screen):
         password = self.ids.log_pass.text
         conn = sqlite3.connect('BANCO.db')
         db = conn.cursor()
-        db.execute('SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
+        db.execute(
+            'SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
         if db.fetchall():
             self.manager.transition.direction = 'left'
             self.manager.current = 'home'
@@ -158,18 +159,19 @@ class HomePage(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-    
+
     def go_to_chat(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'chat'
-    
+
     def on_enter(self):
         global isListaNew
         # Caso a lista de grupos esteja vazia, não aparece nenhum botão nem da erro
         if len(lista) >= 1:
             if isListaNew == True:
                 # Cria o botão para entrar no chat (Não sei pra que serve o lambda, mas ele faz funcionar então safe)
-                self.ids.listview.add_widget(Button(text=lista[-1], on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
+                self.ids.listview.add_widget(Button(
+                    text=lista[-1], on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
                 isListaNew = False
 
     def go_back(self):
@@ -191,7 +193,7 @@ class ChatPage(Screen):
     def exit_chat(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
-    
+
     def send_message(self):
         # Transforma o texto da caixa de msg em variavel 'message'
         message = self.ids.new_message.text
@@ -200,8 +202,9 @@ class ChatPage(Screen):
         # Faz basicamente a mesma função de criar grupo.
         if message:
             msg.append(f'> {message}')
-            self.ids.chat_de_texto.add_widget(Label(text=msg[-1], font_size=20, size_hint_y=None, height=30))
-            
+            self.ids.chat_de_texto.add_widget(
+                Label(text=msg[-1], font_size=20, size_hint_y=None, height=30))
+
 
 # -------- CRIAR GRUPO --------
 
@@ -213,7 +216,7 @@ class CreatePage(Screen):
     def voltar(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
-    
+
     def criar_grupo(self):
         # TODO -> Criar um novo db para cada grupo
         # Não sei se tem como, mas criar um banco de dados gerais para todos os grupos
