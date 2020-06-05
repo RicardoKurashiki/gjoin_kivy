@@ -144,6 +144,7 @@ class RegisterPage(Screen):
 # -------- TELA PRINCIPAL --------
 
 
+lista = ['0','1','2','3','4','5','6','7','0','1','2','3','4','5','6','7',]
 class HomePage(Screen):
     # Logo do app
     imagem_app = kvProps.StringProperty('gjoinLogo.png')
@@ -154,13 +155,12 @@ class HomePage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        for i in lista:
+            self.ids.listview.add_widget(Button(text=i ,font_size=30, size_hint_y=None, height=50))
+
     def go_back(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'login'
-
-    def go_to_group(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'group'
     
     def go_to_chat(self):
         self.manager.transition.direction = 'left'
@@ -170,22 +170,12 @@ class HomePage(Screen):
         self.manager.transition.direction = 'left'
         self.manager.current = 'create'
 
+
 # -------- TELA DE CHAT --------
 
 
 class ChatPage(Screen):
     def exit_chat(self):
-        self.manager.transition.direction = 'right'
-        self.manager.current = 'home'
-
-# -------- SEUS GRUPOS --------
-
-
-class GroupPage(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-    
-    def go_back(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
@@ -208,10 +198,9 @@ class GjoinApp(App):
         Window.size = (400, 600)
         route = ScreenManager()
         # Rotas do aplicativo
+        route.add_widget(HomePage(name='home'))
         route.add_widget(LoginPage(name='login'))
         route.add_widget(RegisterPage(name='register'))
-        route.add_widget(HomePage(name='home'))
-        route.add_widget(GroupPage(name='group'))
         route.add_widget(ChatPage(name='chat'))
         route.add_widget(CreatePage(name='create'))
         # Nome do app
