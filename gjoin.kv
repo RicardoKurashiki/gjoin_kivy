@@ -260,6 +260,7 @@
                 text: "Busca"
                 id: search
                 size_hint:(None,None)
+                on_release: root.go_to_search()
                 height: 50
                 width: 50
     BoxLayout:
@@ -487,3 +488,5 @@
                 text: '>'
                 size: 75, 50
                 size_hint: 0.15, 0.25
+
+<SearchGroup>

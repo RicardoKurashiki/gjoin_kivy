@@ -62,7 +62,7 @@ class RegisterPage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    # Empurra para o DB
+    # Verifica e registra conta no banco de dados
     def register_account(self):
         conf = 1
 
@@ -76,6 +76,7 @@ class RegisterPage(Screen):
                 print('Digite um email que não esteja em uso')
         conn.close()
 
+        #Verifica se não há nenhum campo em branco
         if self.ids.reg_name.text == '':
             conf = 0
             print('Insira um nome')
@@ -100,10 +101,12 @@ class RegisterPage(Screen):
             conf = 0
             print('Insira uma confirmação de senha')
 
+        # Verifica se a confirmação de senha confere
         elif self.ids.reg_pass.text != self.ids.reg_confirmPass.text:
             conf = 0
             print('Senha não confere')
 
+        # Registra o cadastro no banco de dados caso passe por todas as verificações
         elif conf == 1 and check(self.ids.reg_email.text) == 1:
             class Registro(object):
                 def __init__(self, nome, email, universidade, curso, senha, confsenha):
@@ -169,6 +172,10 @@ class HomePage(Screen):
     def go_to_create(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'create'
+    
+    def go_to_search(self):
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'search'
 
 # -------- TELA DE CHAT --------
 
@@ -199,6 +206,15 @@ class CreatePage(Screen):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
+# -------- Procurar GRUPO --------
+
+class SearchGroup(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    def exit_search(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+
 # -------- CONSTRUINDO APP --------
 
 
@@ -214,6 +230,7 @@ class GjoinApp(App):
         route.add_widget(GroupPage(name='group'))
         route.add_widget(ChatPage(name='chat'))
         route.add_widget(CreatePage(name='create'))
+        route.add_widget(SearchGroup(name='search'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
         return route
