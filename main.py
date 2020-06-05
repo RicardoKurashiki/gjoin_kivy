@@ -11,6 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 import kivy.properties as kvProps
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.lang.builder import Builder
 
 
@@ -28,6 +29,10 @@ def check(email):
         conf = 0
     return conf
 
+lista = []
+msg = []
+
+isListaNew = False
 # -------- TELA LOGIN --------
 
 
@@ -144,7 +149,6 @@ class RegisterPage(Screen):
 # -------- TELA PRINCIPAL --------
 
 
-lista = ['0','1','2','3','4','5','6','7','0','1','2','3','4','5','6','7',]
 class HomePage(Screen):
     # Logo do app
     imagem_app = kvProps.StringProperty('gjoinLogo.png')
@@ -154,17 +158,23 @@ class HomePage(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        for i in lista:
-            self.ids.listview.add_widget(Button(text=i ,font_size=30, size_hint_y=None, height=50))
-
-    def go_back(self):
-        self.manager.transition.direction = 'right'
-        self.manager.current = 'login'
     
     def go_to_chat(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'chat'
+    
+    def on_enter(self):
+        global isListaNew
+        # Caso a lista de grupos esteja vazia, não aparece nenhum botão nem da erro
+        if len(lista) >= 1:
+            if isListaNew == True:
+                # Cria o botão para entrar no chat (Não sei pra que serve o lambda, mas ele faz funcionar então safe)
+                self.ids.listview.add_widget(Button(text=lista[-1], on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
+                isListaNew = False
+
+    def go_back(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'login'
 
     def go_to_create(self):
         self.manager.transition.direction = 'left'
@@ -175,9 +185,23 @@ class HomePage(Screen):
 
 
 class ChatPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def exit_chat(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
+    
+    def send_message(self):
+        # Transforma o texto da caixa de msg em variavel 'message'
+        message = self.ids.new_message.text
+        # Limpa a caixa de texto
+        self.ids.new_message.text = ''
+        # Faz basicamente a mesma função de criar grupo.
+        if message:
+            msg.append(f'> {message}')
+            self.ids.chat_de_texto.add_widget(Label(text=msg[-1], font_size=20, size_hint_y=None, height=30))
+            
 
 # -------- CRIAR GRUPO --------
 
@@ -185,7 +209,22 @@ class ChatPage(Screen):
 class CreatePage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
     def voltar(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+    
+    def criar_grupo(self):
+        # TODO -> Criar um novo db para cada grupo
+        # Não sei se tem como, mas criar um banco de dados gerais para todos os grupos
+        # E dentro desse BD criar um banco de dados mais especificos com cada especificação
+        # (NOME, CURSO, HORA, sla)
+        global isListaNew
+        # A lista tem que ser substituida pelo banco de dados
+        lista.append(self.ids.nome_novo_grupo.text)
+        # Validação para não criar grupos repetidos
+        isListaNew = True
+        self.ids.nome_novo_grupo.text = ''
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
@@ -198,9 +237,9 @@ class GjoinApp(App):
         Window.size = (400, 600)
         route = ScreenManager()
         # Rotas do aplicativo
-        route.add_widget(HomePage(name='home'))
         route.add_widget(LoginPage(name='login'))
         route.add_widget(RegisterPage(name='register'))
+        route.add_widget(HomePage(name='home'))
         route.add_widget(ChatPage(name='chat'))
         route.add_widget(CreatePage(name='create'))
         # Nome do app
