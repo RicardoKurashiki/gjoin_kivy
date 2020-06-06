@@ -373,54 +373,56 @@
                 size: self.size
                 pos: self.pos
     BoxLayout:
-        orientation: 'horizontal'
-        Button:
-            size_hint: (0.15, 0.1)
-            pos_hint: {'y': 0.87}
-            text: 'Voltar'
-            on_release: root.exit_chat()
-            
-        Label:
-            size_hint: (0.9, None)
-            pos_hint: {'y': 0.835}
-            text: '[b]Sala de bate-papo[/b]'
-            markup: True
-            font_size: 24
-    
-    BoxLayout:
         orientation: 'vertical'
-        Widget:
-            canvas:
-                Color:
-                    rgba: [0,0,0,0.8]
-                Rectangle:
-                    size: (377, 455)
-                    pos: 10, 60
+        spacing: 5
+        padding: 1
+
         BoxLayout:
-            size_hint_x:None
-            size_hint_y:None
-            height: 425
-            width: 377
-            ScrollView:
-                BoxLayout:
-                    orientation: 'vertical'
-                    id: chat_de_texto
-                    size_hint_y: None
-                    height: self.minimum_height
-        BoxLayout:
-            orientation: 'horizontal'
-            TextInput:
-                id: new_message
-                multiline: False
-                padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 20
-                size: 75, 50
-                size_hint: 0.7, 0.75
+            height: 30
+            size_hint_y: None
             Button:
-                text: '>'
-                size: 75, 50
-                size_hint: 0.15, 0.75
-                on_release: root.send_message()
+                size_hint_x: None
+                width: 60
+                text: 'Voltar'
+                on_release: root.exit_chat()
+            Label:
+                text: '[b]Sala de bate-papo[/b]'
+                markup: True
+                font_size: 24
+        BoxLayout:
+            orientation: 'vertical'
+            Widget:
+                canvas:
+                    Color:
+                        rgba: [0,0,0,0.8]
+                    Rectangle:
+                        size: (377, 455)
+                        pos: 10, 60
+            BoxLayout:
+                size_hint_x:None
+                size_hint_y:None
+                height: 425
+                width: 377
+                ScrollView:
+                    BoxLayout:
+                        orientation: 'vertical'
+                        id: chat_de_texto
+                        size_hint_y: None
+                        height: self.minimum_height
+            BoxLayout:
+                orientation: 'horizontal'
+                TextInput:
+                    id: new_message
+                    multiline: False
+                    padding: [10, 0.5*(self.height - self.line_height)]
+                    font_size: 20
+                    size: 75, 50
+                    size_hint: 0.7, 0.75
+                Button:
+                    text: '>'
+                    size: 75, 50
+                    size_hint: 0.15, 0.75
+                    on_release: root.send_message()
 
 <SearchPage>:
     Widget:

@@ -18,7 +18,6 @@ import re
 
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
-
 def check(email):
     conf = 1
     if(re.search(regex, email)):
@@ -28,13 +27,12 @@ def check(email):
         conf = 0
     return conf
 
+GroupList = [] # Lista de grupos que cada usuário tem
+msg = [] 
+isListaNew = False # Impede a criação de novos widgets durante a navegação no app
+idLogado = 0 # Id será armazenado para acessar os grupos e informações relacionados a ele
 
-lista = []
-msg = []
-
-isListaNew = False
 # -------- TELA LOGIN --------
-
 
 class LoginPage(Screen):
     def __init__(self, **kwargs):
@@ -44,6 +42,8 @@ class LoginPage(Screen):
     imagem_app = kvProps.StringProperty('gjoinLogo.png')
 
     def login(self):
+
+        #Verificando se o login e senha estão correntos
         user = self.ids.log_email.text
         password = self.ids.log_pass.text
         conn = sqlite3.connect('BANCO.db')
@@ -51,10 +51,45 @@ class LoginPage(Screen):
         db.execute(
             'SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
         if db.fetchall():
+            #Chamando as variáveis globais para a função
+            global idLogado
+            global isListaNew
+
+            # Mudança da tela de login para a home page
             self.manager.transition.direction = 'left'
             self.manager.current = 'home'
+
+            # Armazenando o ID logado na variável global idLogado
+            conn = sqlite3.connect('BANCO.db')
+            db = conn.cursor()
+            db.execute('''SELECT id FROM dados WHERE email = ? and senha = ?''', (user, password))
+            idLogado = db.fetchone()[0]
+            conn.close()
+
+            # Permitindo que durante o login possam ser gerados novos widgets
+            isListaNew = True
+
+            # Contando quantos grupos estão associados ao idLogado
+            conn = sqlite3.connect('BANCO.db')
+            cursor = conn.cursor()
+            cursor.execute("""SELECT COUNT(nome) FROM groupsdb WHERE idUser = {}""".format(idLogado)) 
+            total = cursor.fetchone()[0]
+            conn.close()
+
+            # Selecionando o nome dos grupos que o idLogado está e armazenando na lista de grupos
+            conn = sqlite3.connect('BANCO.db')
+            cursor = conn.cursor()
+            cursor.execute("""SELECT nome FROM groupsdb WHERE idUser = {}""".format(idLogado))
+            cont = 0 #Variável contadora apenas para o while não entrar em loop infinito
+            while cont < total:
+                osgrupos = cursor.fetchone()[0]
+                GroupList.append(osgrupos)
+                cont += 1
+            conn.close()
+
         else:
             print('O usuário e senha não são válidos!')
+
         conn.close()
 
     def go_register(self):
@@ -62,7 +97,6 @@ class LoginPage(Screen):
         self.manager.current = 'register'
 
 # -------- TELA REGISTRAR --------
-
 
 class RegisterPage(Screen):
     def __init__(self, **kwargs):
@@ -127,13 +161,10 @@ class RegisterPage(Screen):
                               curso=self.ids.reg_curso.text, senha=self.ids.reg_pass.text, confsenha=self.ids.reg_confirmPass.text)  # Criação do novo registro
             conn = sqlite3.connect('BANCO.db')  # Conexão com o DB
             cursor = conn.cursor()
-
-            cursor.execute("""INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) """,
+            cursor.execute('''INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) ''',
                            (NovReg.nome, NovReg.email, NovReg.senha, NovReg.universidade, NovReg.curso))
-
             conn.commit()
-            print(
-                '------------------------------------  Registrado ------------------------------------')
+            print('------------------------------------  Registrado ------------------------------------')
             conn.close()
 
             self.manager.transition.direction = 'down'
@@ -162,25 +193,35 @@ class HomePage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def go_to_chat(self):
+    def go_to_chat(self): #Possivelmente: def go_to_chat(self, group)
         self.manager.transition.direction = 'left'
         self.manager.current = 'chat'
 
     def on_enter(self):
         global isListaNew
-        # Caso a lista de grupos esteja vazia, não aparece nenhum botão nem da erro
-        if len(lista) >= 1:
-            if isListaNew == True:
-                # Cria o botão para entrar no chat (Não sei pra que serve o lambda, mas ele faz funcionar então safe)
+        if isListaNew == True: #Verifica se pode criar um widget novo
+            for i in GroupList: #Cria um widget novo para cada grupo que o idLogado está associado
                 self.ids.listview.add_widget(Button(
-                    text=lista[-1], on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
-                isListaNew = False
+                    text = i, on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
+            isListaNew = False 
 
     def go_back(self):
+
+        #Chama as variáveis globais para reiniciá-las
+        global idLogado
+        global GroupList
+        idLogado = 0
+        GroupList = []
+
+        # Limpa todos os widgets para o idLogado
+        self.ids.listview.clear_widgets()
+
+        # Vai para página de login
         self.manager.transition.direction = 'right'
         self.manager.current = 'login'
 
     def go_to_create(self):
+        self.ids.listview.clear_widgets()
         self.manager.transition.direction = 'left'
         self.manager.current = 'create'
     
@@ -216,32 +257,38 @@ class CreatePage(Screen):
         super().__init__(**kwargs)
 
     def voltar(self):
+        global isListaNew
+        isListaNew = True
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
     def criar_grupo(self):
-        # TODO -> Criar um novo db para cada grupo
-        # Não sei se tem como, mas criar um banco de dados gerais para todos os grupos
-        # E dentro desse BD criar um banco de dados mais especificos com cada especificação
-        # (NOME, CURSO, HORA, sla)
-        global isListaNew
-        # A lista tem que ser substituida pelo banco de dados
         # ------ VARIAVEIS PARA A VERIFICAÇÃO -------
         self.nomeGrupo = self.ids.nome_novo_grupo.text
         self.faculGrupo = self.ids.faculdade_novo_grupo.text
         self.matGrupo = self.ids.materia_novo_grupo.text
         self.horGrupo = self.ids.horario_novo_grupo.text
         # Caso esteja tudo preenchido
-        if(self.nomeGrupo and self.faculGrupo and self.matGrupo and self.horGrupo) != '':
-            lista.append(self.nomeGrupo)
-            # Evitar criar grupo acidentalmente
-            isListaNew = True
-            self.ids.nome_novo_grupo.text = ''
-            self.ids.faculdade_novo_grupo.text = ''
-            self.ids.materia_novo_grupo.text = ''
-            self.ids.horario_novo_grupo.text = ''
+        if (self.nomeGrupo and self.faculGrupo and self.matGrupo and self.horGrupo) != '':
+            # Chama as variáveis globais para a função
+            global idLogado
+            global isListaNew
+
+            isListaNew = True # Permite a criação de um novo widget
+            GroupList.append(self.nomeGrupo) # Armazena o nome do novo grupo na lista de grupos
+            
+            # Armazena as informações inseridas no banco de dados
+            conn = sqlite3.connect('BANCO.db')
+            cursor = conn.cursor()
+            cursor.execute('''INSERT INTO groupsdb VALUES(NULL, ?, ?, ?, ?, ?)''', 
+            (self.nomeGrupo, self.faculGrupo, self.matGrupo, self.horGrupo, idLogado))
+            conn.commit()
+            conn.close()
+
+            # Retorna para a home page
             self.manager.transition.direction = 'right'
             self.manager.current = 'home'
+
         # Faltando nome para o grupo
         if self.nomeGrupo == '':
             print('Informe um nome para o grupo')
@@ -254,7 +301,7 @@ class CreatePage(Screen):
         # Faltando horario para o grupo
         if self.horGrupo == '':
             print('Informe um horário para o grupo')
-
+        
 # -------- PROCURAR GRUPO ---------
 
 class SearchPage(Screen):
