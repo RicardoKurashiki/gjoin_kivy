@@ -1,17 +1,19 @@
-# -------- IMPORTAÇÕES --------
 from kivy.config import Config
 # Fixar tamanho
 Config.set('graphics', 'resizable', False)
 from kivy.lang.builder import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import Screen, ScreenManager
 import kivy.properties as kvProps
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.app import App
 import sqlite3
 import re
+from DataBase_funcs import BancoDadosGrupos
 
 
 # -------- CÓDIGO PRINCIPAL --------
@@ -19,41 +21,68 @@ import re
 regex = '^[a-z0-9]+[\._]?[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
 def check(email):
-    conf = 1
-    if(re.search(regex, email)):
-        conf = 1
-    else:
-        print('Insira um e-mail válido')
-        conf = 0
-    return conf
+    valid = True
 
-GroupList = [] # Lista de grupos que cada usuário tem
-msg = [] 
-isListaNew = False # Impede a criação de novos widgets durante a navegação no app
+    if(re.search(regex, email)):
+        valid = True
+
+    else:
+        valid = False
+        avisopop = 'Insira um e-mail valido.'
+
+        pops = WarningPopup()
+        pops.ids.aviso.text = avisopop
+        pops.open()
+
+    return valid
+
+msg = [] # Lista de mensagens do grupo
 idLogado = 0 # Id será armazenado para acessar os grupos e informações relacionados a ele
+avisopop = ''
+
+# -------- RECYCLE VIEW --------
+
+class LinhaSearch(BoxLayout):
+    nome_group = kvProps.StringProperty('')
+    idGrupo = kvProps.NumericProperty()
+    
+    def clique(self):
+        db = BancoDadosGrupos()
+        GrupoList = db.listarGruposPorId(self.idGrupo)
+        App.get_running_app().registro_atual = GrupoList
+        
+        print(self.idGrupo)
+
+class LinhaHomePage(BoxLayout):
+    nome_group = kvProps.StringProperty('')
+    idGrupo = kvProps.NumericProperty()
+
+    def go_chat(self):
+        db = BancoDadosGrupos()
+        GrupoList = db.listarGruposPorId(self.idGrupo)
+        App.get_running_app().registro_atual = GrupoList
+
+        print(self.idGrupo)
 
 # -------- TELA LOGIN --------
-
 class LoginPage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     # Logo do app
-    imagem_app = kvProps.StringProperty('gjoinLogo.png')
+    imagem_app = kvProps.StringProperty('gjoinLogo.jpeg')
 
     def login(self):
-
         #Verificando se o login e senha estão correntos
         user = self.ids.log_email.text
         password = self.ids.log_pass.text
         conn = sqlite3.connect('BANCO.db')
         db = conn.cursor()
-        db.execute(
-            'SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
+        db.execute('SELECT * FROM dados WHERE email = ? AND senha = ?', (user, password))
+
         if db.fetchall():
             #Chamando as variáveis globais para a função
             global idLogado
-            global isListaNew
 
             # Mudança da tela de login para a home page
             self.manager.transition.direction = 'left'
@@ -66,29 +95,13 @@ class LoginPage(Screen):
             idLogado = db.fetchone()[0]
             conn.close()
 
-            # Permitindo que durante o login possam ser gerados novos widgets
-            isListaNew = True
-
-            # Contando quantos grupos estão associados ao idLogado
-            conn = sqlite3.connect('BANCO.db')
-            cursor = conn.cursor()
-            cursor.execute("""SELECT COUNT(nome) FROM groupsdb WHERE idUser = {}""".format(idLogado)) 
-            total = cursor.fetchone()[0]
-            conn.close()
-
-            # Selecionando o nome dos grupos que o idLogado está e armazenando na lista de grupos
-            conn = sqlite3.connect('BANCO.db')
-            cursor = conn.cursor()
-            cursor.execute("""SELECT nome FROM groupsdb WHERE idUser = {}""".format(idLogado))
-            cont = 0 #Variável contadora apenas para o while não entrar em loop infinito
-            while cont < total:
-                osgrupos = cursor.fetchone()[0]
-                GroupList.append(osgrupos)
-                cont += 1
-            conn.close()
-
         else:
-            print('O usuário e senha não são válidos!')
+            global avisopop
+            avisopop = 'O usuario e senha nao sao validos.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         conn.close()
 
@@ -104,7 +117,8 @@ class RegisterPage(Screen):
 
     # Verifica e registra conta no banco de dados
     def register_account(self):
-        conf = 1
+        global avisopop
+        valid = True
 
         # Verificação de email no banco de dados
         conn = sqlite3.connect('BANCO.db')
@@ -112,42 +126,70 @@ class RegisterPage(Screen):
         cursor.execute("""SELECT email FROM dados;""")
         for registro in cursor.fetchall():
             if registro == (self.ids.reg_email.text,):
-                conf = 0
+                valid = False
                 print('Digite um email que não esteja em uso')
         conn.close()
 
         #Verifica se não há nenhum campo em branco
         if self.ids.reg_name.text == '':
-            conf = 0
-            print('Insira um nome')
+            valid = False
+            avisopop = 'Insira um nome.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         elif self.ids.reg_email.text == '':
-            conf = 0
-            print('Insira um email')
+            valid = False
+            avisopop = 'Insira um e-mail.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         elif self.ids.reg_univ.text == '':
-            conf = 0
-            print('Insira uma universidade')
+            valid = False
+            avisopop = 'Insira uma Universidade.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         elif self.ids.reg_curso.text == '':
-            conf = 0
-            print('Insira um curso')
+            valid = False
+            avisopop = 'Insira um curso.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         elif self.ids.reg_pass.text == '':
-            conf = 0
-            print('Insira uma senha')
+            valid = False
+            avisopop = 'Insira uma senha.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         elif self.ids.reg_confirmPass.text == '':
-            conf = 0
-            print('Insira uma confirmação de senha')
+            valid = False
+            avisopop = 'Insira uma confirmacao de senha.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         # Verifica se a confirmação de senha confere
         elif self.ids.reg_pass.text != self.ids.reg_confirmPass.text:
-            conf = 0
-            print('Senha não confere')
+            valid = False
+            avisopop = 'Senhas nao conferem.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
 
         # Registra o cadastro no banco de dados caso passe por todas as verificações
-        elif conf == 1 and check(self.ids.reg_email.text) == 1:
+        elif valid == True and check(self.ids.reg_email.text) == True:
             class Registro(object):
                 def __init__(self, nome, email, universidade, curso, senha, confsenha):
                     self.nome = nome
@@ -164,8 +206,14 @@ class RegisterPage(Screen):
             cursor.execute('''INSERT INTO dados (usuario, email, senha, universidade, curso) VALUES (?,?,?,?,?) ''',
                            (NovReg.nome, NovReg.email, NovReg.senha, NovReg.universidade, NovReg.curso))
             conn.commit()
-            print('------------------------------------  Registrado ------------------------------------')
             conn.close()
+
+            avisopop = 'Registro realizado.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
+
 
             self.manager.transition.direction = 'down'
             self.manager.current = 'login'
@@ -185,10 +233,7 @@ class RegisterPage(Screen):
 
 class HomePage(Screen):
     # Logo do app
-    imagem_app = kvProps.StringProperty('gjoinLogo.png')
-
-    # Lupa
-    Lupa = kvProps.StringProperty('lupa.png')
+    imagem_app = kvProps.StringProperty('gjoinLogo.jpeg')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -198,30 +243,28 @@ class HomePage(Screen):
         self.manager.current = 'chat'
 
     def on_enter(self):
-        global isListaNew
-        if isListaNew == True: #Verifica se pode criar um widget novo
-            for i in GroupList: #Cria um widget novo para cada grupo que o idLogado está associado
-                self.ids.listview.add_widget(Button(
-                    text = i, on_release=lambda x: self.go_to_chat(), font_size=30, size_hint_y=None, height=50))
-            isListaNew = False 
+        global idLogado
+
+        #Recycle View criando os botões do grupo
+        db = BancoDadosGrupos()
+        grupos = db.listarGruposLogado(idLogado)
+        self.ids.listagemhome.data = list()
+        if grupos != None:
+            for g in grupos:
+                self.ids.listagemhome.data.append({'idGrupo': g.idGrupo, 'nome_group': g.nome_group})
+        else:
+            None
 
     def go_back(self):
-
-        #Chama as variáveis globais para reiniciá-las
+        #Chama o idLogado para reiniciá-lo
         global idLogado
-        global GroupList
         idLogado = 0
-        GroupList = []
-
-        # Limpa todos os widgets para o idLogado
-        self.ids.listview.clear_widgets()
 
         # Vai para página de login
         self.manager.transition.direction = 'right'
         self.manager.current = 'login'
 
     def go_to_create(self):
-        self.ids.listview.clear_widgets()
         self.manager.transition.direction = 'left'
         self.manager.current = 'create'
     
@@ -240,15 +283,7 @@ class ChatPage(Screen):
         self.manager.current = 'home'
 
     def send_message(self):
-        # Transforma o texto da caixa de msg em variavel 'message'
-        message = self.ids.new_message.text
-        # Limpa a caixa de texto
-        self.ids.new_message.text = ''
-        # Faz basicamente a mesma função de criar grupo.
-        if message:
-            msg.append(f'> {message}')
-            self.ids.chat_de_texto.add_widget(
-                Label(text=msg[-1], font_size=20, size_hint_y=None, height=30))
+        pass
 
 # -------- CRIAR GRUPO --------
 
@@ -257,8 +292,6 @@ class CreatePage(Screen):
         super().__init__(**kwargs)
 
     def voltar(self):
-        global isListaNew
-        isListaNew = True
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
@@ -271,12 +304,9 @@ class CreatePage(Screen):
         # Caso esteja tudo preenchido
         if (self.nomeGrupo and self.faculGrupo and self.matGrupo and self.horGrupo) != '':
             # Chama as variáveis globais para a função
+            global avisopop
             global idLogado
-            global isListaNew
 
-            isListaNew = True # Permite a criação de um novo widget
-            GroupList.append(self.nomeGrupo) # Armazena o nome do novo grupo na lista de grupos
-            
             # Armazena as informações inseridas no banco de dados
             conn = sqlite3.connect('BANCO.db')
             cursor = conn.cursor()
@@ -289,18 +319,40 @@ class CreatePage(Screen):
             self.manager.transition.direction = 'right'
             self.manager.current = 'home'
 
+            # Zera os campos
+            self.ids.nome_novo_grupo.text = ''
+            self.ids.faculdade_novo_grupo.text = ''
+            self.ids.materia_novo_grupo.text = ''
+            self.ids.horario_novo_grupo.text = ''
+
         # Faltando nome para o grupo
         if self.nomeGrupo == '':
-            print('Informe um nome para o grupo')
+            avisopop = 'Informe um nome para o grupo.'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
         # Faltando faculdade para o grupo
         if self.faculGrupo == '':
-            print('Informe uma faculdade para o grupo')
+            avisopop = 'Informe uma faculdade para o grupo'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
         # Faltando materia para o grupo
         if self.matGrupo == '':
-            print('Informe uma matéria para o grupo')
+            avisopop = 'Informe uma disciplina para o grupo'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
         # Faltando horario para o grupo
         if self.horGrupo == '':
-            print('Informe um horário para o grupo')
+            avisopop = 'Informe um horario para o grupo'
+
+            pops = WarningPopup()
+            pops.ids.aviso.text = avisopop
+            pops.open()
         
 # -------- PROCURAR GRUPO ---------
 
@@ -311,9 +363,25 @@ class SearchPage(Screen):
     def returnhome(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
+
+    def TodosGrupos(self):
+        self.pesquisa('')
     
-    def pesquisa(self):
-        pass
+    def pesquisa(self, nome):
+        nome = self.ids.txBusca.text
+        db = BancoDadosGrupos()
+        grupos = db.listarGruposPorNome(nome)
+        self.ids.listagem.data = list()
+        if grupos != None:
+            for g in grupos:
+                self.ids.listagem.data.append({'idGrupo': g.idGrupo, 'nome_group': g.nome_group})       
+        else:
+            None
+
+# -------- POPUP DE AVISOS ---------
+
+class WarningPopup(Popup):
+    pass
 
 # -------- CONSTRUINDO APP --------
 

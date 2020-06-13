@@ -1,8 +1,37 @@
+<LinhaSearch>
+    spacing: 5
+    Button:
+        text: root.nome_group
+        font_size: 20
+        on_release: root.clique()
+
+<LinhaHomePage>
+    spacing: 5
+    Button:
+        text:root.nome_group
+        font_size: 20
+        on_release: root.go_chat()
+
+<WarningPopup>:
+    id: pop
+    size_hint: .7, .3
+    auto_dismiss: False
+    title: 'Atencao'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 5
+        spacing: 5
+        Label: 
+            id: aviso
+            text: ''
+        Button:
+            text: 'Continuar'
+            on_release: pop.dismiss()
 <LoginPage>:
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.2, 1, 1]
+                rgba: [192, 192, 192, 0.97]
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -13,353 +42,327 @@
                 Color:
                     rgba: [1,1,1,0.9]
                 Rectangle:
-                    pos: (100, 375)
-                    size: (200, 200)
+                    pos: (137.5, 445)
+                    size: (125, 125)
                     source: root.imagem_app
-        GridLayout:
-            rows: 2
-            cols: 2
-            padding: 10
-            spacing: 10
-            pos_hint: {'x': 0, 'y': 0.75}
-            size_hint: (1, 0.75)
-
-            Label:
-                text: '[b]E-mail[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
-            TextInput:
-                id: log_email
-                padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 16
-                multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
-            Label:
-                text: '[b]Senha[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
-            TextInput:
-                id: log_pass
-                password: True
-                padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 16
-                multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-    
-        GridLayout:
-            rows: 1
-            cols: 2
-            padding: 10
-            spacing: 10
-            pos_hint: {'y': 0}
-            size_hint: (None, None)
-            
-            Button:
-                id: login
-                text: 'LOGIN'
-                size_hint: (None, None)
-                height: 40
-                width: 185
-                on_release: root.login()
-
-            Button:
-                text: 'REGISTRAR'
-                size_hint: (None, None)
-                height: 40
-                width: 185
-                on_release: root.go_register()
+        BoxLayout:
+            orientation: 'vertical'
+            Widget:
+                Label:
+                    text: 'E-mail'
+                    font_size: 24
+                    color: (0,0,0,1)
+                    size: 75, 50
+                    pos: 25, 345
+            Widget:
+                TextInput:
+                    id: log_email
+                    padding: [10, 0.5*(self.height - self.line_height)]
+                    font_size: 16
+                    multiline: False
+                    size: 350, 50
+                    pos: 25, 300
+                    size_hint: 0.5, None
+            Widget:
+                Label:
+                    text: 'Senha'
+                    font_size: 24
+                    color: (0,0,0,1)
+                    size: 75, 50
+                    pos: 25, 240
+            Widget:
+                TextInput:
+                    id: log_pass
+                    password: True
+                    padding: [10, 0.5*(self.height - self.line_height)]
+                    font_size: 16
+                    multiline: False
+                    size: 350, 50
+                    pos: 25, 195
+                    size_hint: 0.5, None
+            Widget:        
+                Button:
+                    id: login
+                    text: 'Login'
+                    size_hint: (None, None)
+                    size: 167.5, 40
+                    pos: 25, 25
+                    on_release: root.login()
+            Widget:
+                Button:
+                    text: 'Cadastrar'
+                    size_hint: (None, None)
+                    size: 167.5, 40
+                    pos: 207.5, 25
+                    on_release: root.go_register()
 
 <RegisterPage>:
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.35, 1, 1]
+                rgba: [192, 192, 192, 0.97]
             Rectangle:
                 size: self.size
                 pos: self.pos
     BoxLayout:
         orientation: 'vertical'
-
-        GridLayout:
-            rows: 6
-            cols: 2
-            padding: 10
-            spacing: 20
-
+        Widget:
             Label:
-                text: '[b]Nome completo[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'Nome completo'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 47.5, 550
+        Widget:
             TextInput:
                 id: reg_name
                 text: ''
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
+                size: 350, 30
+                pos: 25, 525
+        Widget:
             Label:
-                text: '[b]E-mail[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'E-mail'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 5, 475
+        Widget:
             TextInput:
                 id: reg_email
                 text: ''
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
+                size: 350, 30
+                pos: 25, 450
+        Widget:
             Label:
-                text: '[b]Universidade[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'Universidade'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 34.5, 400
             TextInput:
                 id: reg_univ
                 text: ''
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
+                size: 350, 30
+                pos: 25, 375
+        Widget:
             Label:
-                text: '[b]Curso[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'Curso'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 2.5, 325
+        Widget:
             TextInput:
                 id: reg_curso
                 text: ''
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-                
+                size: 350, 30
+                pos: 25, 300
+        Widget:
             Label:
-                text: '[b]Senha[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'Senha'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 4.5, 250
+        Widget:
             TextInput:
                 id: reg_pass
                 text: ''
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
+                size: 350, 30
+                pos: 25, 225
+        Widget:
             Label:
-                text: '[b]Confirmar\nSenha[/b]'
-                font_size: 24
-                markup: True
-                size: 75, 50
-                size_hint: 0.5, None
+                text: 'Confirmar Senha'
+                font_size: 20
+                color: (0,0,0,1)
+                size: self.width, 50
+                pos: 52.5, 175
+        Widget:
             TextInput:
                 id: reg_confirmPass
                 text: ''
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 12
+                font_size: 15
                 multiline: False
-                size: 75, 50
-                size_hint: 0.5, None
-
-        GridLayout:
-            rows: 1
-            cols: 2
-            padding: 10
-            spacing: 20
-            pos_hint: {'y': 0}
-            size_hint: (None, None)
-
+                size: 350, 30
+                pos: 25, 150
+        Widget:
             Button:
                 id: register
-                text: 'REGISTRAR'
+                text: 'Registrar'
                 size_hint: (None, None)
-                height: 40
-                width: 180
-                pos_hint: {'x': 0.30, 'y': -0.5}
+                size: 167.5, 40
+                pos: 25, 25
                 on_release: root.register_account()
-
+        Widget:
             Button:
                 id: reg_cancel
-                text: 'CANCELAR'
+                text: 'Cancelar'
                 size_hint: (None, None)
-                height: 40
-                width: 180
-                pos_hint: {'x': 0.30, 'y': -0.5}
+                size: 167.5, 40
+                pos: 207.5, 25
                 on_release: root.cancel_register()
 
 <HomePage>: 
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.2, 1, 1]
+                rgba: [192, 192, 192, 1]
             Rectangle:
                 size: self.size
                 pos: self.pos
-    ScrollView:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 5
+        padding: 5
         BoxLayout:
-            padding: (7, 55)
-            spacing: 2.5
-            id: listview
-            orientation: 'vertical'
+            height: 162.5
             size_hint_y: None
-            height: self.minimum_height
-    Widget:
-        canvas:
-            Color:
-                rgba: [0.25, 0.2, 1, 1]
-            Rectangle:
-                pos:(0,550)
-                size:(400,50)
-        Widget:
-            canvas:
-                Color:
-                    rgba: [1,1,1,0.9]
-                Rectangle:
-                    pos:(0,550)
-                    size:(50,50)
-                    source: root.imagem_app
-        Widget:
-            Button:
-                pos:(50,570)
-                id: logout
-                text: "Logout"
-                size_hint: (None,None)
-                height: 30
-                width: 60
-                on_release: root.go_back()
-     
-            Button:
-                pos: (110,570)
-                id: criar_gp
-                text: "Criar Grupo"
-                size_hint: (None,None)
-                on_release: root.go_to_create()
-                height: 30
-                width: 90
-
-            Button:
-                pos: (340, 570)
-                text: "Buscar"
-                id: search
-                size_hint:(None,None)
-                on_release: root.go_to_search()
-                height: 30
-                width: 60
-            
-
+            Widget:
+                canvas:
+                    Color:
+                        rgba: [1,1,1,0.9]
+                    Rectangle:
+                        pos:(10,555)
+                        size:(35,35)
+                        source: root.imagem_app
+            Widget:
+                Button:
+                    pos: (50,555)
+                    id: criar_gp
+                    text: "Novo Grupo"
+                    on_release: root.go_to_create()
+                    size: (130, 35)
+                Button:
+                    pos: (185, 555)
+                    text: "Buscar"
+                    id: search
+                    on_release: root.go_to_search()
+                    size: (100, 35)
+                Button:
+                    pos:(290,555)
+                    id: logout
+                    text: "Logout"
+                    size: (100, 35)
+                    on_release: root.go_back()
+            Widget:
+                Label:
+                    text: 'Meus Grupos'
+                    font_size: 30
+                    size: (400, 100)
+                    pos: 0, 450
+                    color: (0, 0, 0, 1)
+        RecycleView:
+            id: listagemhome
+            viewclass: 'LinhaHomePage'
+            RecycleBoxLayout:
+                padding: 2.5
+                spacing: 5
+                default_size: None, dp(35)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
 <CreatePage>:
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.2, 1, 1]
+                rgba: [192, 192, 192, 0.97]
             Rectangle:
                 size: self.size
                 pos: self.pos
     Widget:
         Button:
-            pos:(0,570)
-            text: "Voltar"
-            size_hint: (None,None)
-            height: 30
-            width: 60
+            text: 'Voltar'
+            pos: (10, 565)
+            size: (60, 25)
             on_release: root.voltar()
-    GridLayout:
-        pos: (0,-110)
-        rows: 4
-        cols: 2
-        padding: 10
-        spacing: 20
-
+    Widget:
         Label:
-            text: '[b]Nome do Grupo[/b]'
+            text: 'Nome do Grupo'
             font_size: 24
-            markup: True
+            color: (0, 0, 0, 1)
             size: 75, 50
-            size_hint: 0.5, None
+            pos: 57.5, 465
+    Widget:
         TextInput:
             id: nome_novo_grupo
             text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
             font_size: 12
             multiline: False
-            size: 75, 50
-            size_hint: 0.5, None
-
+            size: 380, 40
+            pos: 10, 430
+    Widget:
         Label:
-            text: '[b]Faculdade[/b]'
+            text: 'Faculdade'
             font_size: 24
-            markup: True
-            size: 75, 50
-            size_hint: 0.5, None
+            color: (0, 0, 0, 1)
+            size: 85, 50
+            pos: 25, 380
+    Widget:
         TextInput:
             id: faculdade_novo_grupo
             text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
             font_size: 12
             multiline: False
-            size: 75, 50
-            size_hint: 0.5, None
-
+            size: 380, 40
+            pos: 10, 345
+    Widget:
         Label:
-            text: '[b]Materia[/b]'
+            text: 'Disciplina'
             font_size: 24
-            markup: True
-            size: 75, 50
-            size_hint: 0.5, None
+            color: (0, 0, 0, 1)
+            size: 77.5, 50
+            pos: 25, 295
+    Widget:
         TextInput:
             id: materia_novo_grupo
             text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
             font_size: 12
             multiline: False
-            size: 75, 50
-            size_hint: 0.5, None
-
+            size: 380, 40
+            pos: 10, 260
+    Widget:
         Label:
-            text: '[b]Horario[/b]'
+            text: 'Horario'
             font_size: 24
-            markup: True
-            size: 75, 50
-            size_hint: 0.5, None
+            color: (0, 0, 0, 1)
+            size: 52.5, 50
+            pos: 25, 210
+    Widget:
         TextInput:
             id: horario_novo_grupo
             text: ''
             padding: [10, 0.5*(self.height - self.line_height)]
             font_size: 12
             multiline: False
-            size: 75, 50
-            size_hint: 0.5, None
+            size: 380, 40
+            pos: 10, 175
     Widget:
         Button:
-            pos:(100, 70)
             text: "Criar Grupo"
-            size_hint: (None,None)
-            height: 60
-            width: 200
+            size: 380, 55
+            pos: 10, 20
             on_release: root.criar_grupo()
 
 <ChatPage>:
@@ -368,7 +371,7 @@
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.2, 1, 1]
+                rgba: [192, 192, 192, 0.97]
             Rectangle:
                 size: self.size
                 pos: self.pos
@@ -376,28 +379,31 @@
         orientation: 'vertical'
         spacing: 5
         padding: 1
-
         BoxLayout:
             height: 30
             size_hint_y: None
-            Button:
-                size_hint_x: None
-                width: 60
-                text: 'Voltar'
-                on_release: root.exit_chat()
-            Label:
-                text: '[b]Sala de bate-papo[/b]'
-                markup: True
-                font_size: 24
+            Widget:
+                Button:
+                    text: 'Voltar'
+                    pos: (10, 565)
+                    size: (60, 25)
+                    on_release: root.exit_chat()
+            Widget:
+                Label:
+                    text: 'Sala de Chat'
+                    color: (0,0,0,1)
+                    pos: (0, 565)
+                    size: (400, 25)
+                    font_size: 24
         BoxLayout:
             orientation: 'vertical'
             Widget:
                 canvas:
                     Color:
-                        rgba: [0,0,0,0.8]
+                        rgba: [0,0,0,0.4]
                     Rectangle:
-                        size: (377, 455)
-                        pos: 10, 60
+                        size: (380, 490)
+                        pos: 10, 55
             BoxLayout:
                 size_hint_x:None
                 size_hint_y:None
@@ -410,51 +416,76 @@
                         size_hint_y: None
                         height: self.minimum_height
             BoxLayout:
-                orientation: 'horizontal'
-                TextInput:
-                    id: new_message
-                    multiline: False
-                    padding: [10, 0.5*(self.height - self.line_height)]
-                    font_size: 20
-                    size: 75, 50
-                    size_hint: 0.7, 0.75
-                Button:
-                    text: '>'
-                    size: 75, 50
-                    size_hint: 0.15, 0.75
-                    on_release: root.send_message()
+                Widget:
+                    TextInput:
+                        id: new_message
+                        multiline: False
+                        padding: [10, 0.5*(self.height - self.line_height)]
+                        font_size: 20
+                        pos: 10, 10
+                        size: 325, 35
+                Widget:
+                    Button:
+                        text: '>'
+                        size: 50, 35
+                        pos: 340, 10
+                        on_release: root.send_message()
 
 <SearchPage>:
+    on_enter: root.TodosGrupos()
     Widget:
         canvas:
             Color:
-                rgba: [0.25, 0.2, 1, 1]
+                rgba: [192, 192, 192, 0.97]
             Rectangle:
                 size: self.size
                 pos: self.pos
     BoxLayout:
         orientation: 'vertical'
         spacing: 5
-        padding: 1
-
+        padding: 5
         BoxLayout:
-            height: 30
+            height: 162.5
             size_hint_y: None
-            Button:
-                size_hint_x: None
-                width: 60
-                on_release: root.returnhome()
-                text: 'Voltar'
-            TextInput:
-                id: txBusca
-                text: ''
-            Button:
-                size_hint_x: None
-                width: 60
-                on_release: root.pesquisa()
-                text: 'Buscar'
-        BoxLayout:
-            text: ''
+            Widget:
+                Button:
+                    text: 'Voltar'
+                    pos: (10, 565)
+                    size: (60, 25)
+                    on_release: root.returnhome()
+            Widget:
+                TextInput:
+                    id: txBusca
+                    font_size: 10
+                    text: ''
+                    pos: (72.5, 565)
+                    size: (255, 25)
+            Widget:
+                Button:
+                    text: 'Buscar'
+                    size: (60, 25)
+                    pos: (330, 565)
+                    on_release: root.pesquisa(txBusca)
+            Widget:
+                Label:
+                    text: 'Grupos'
+                    font_size: 30
+                    size: (400, 100)
+                    pos: 0, 450
+                    color: (0, 0, 0, 1)
+        RecycleView:
+            id: listagem
+            viewclass: 'LinhaSearch'
+            RecycleBoxLayout:
+                padding: 2.5
+                spacing: 5
+                default_size: None, dp(35)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+
 
 
             
