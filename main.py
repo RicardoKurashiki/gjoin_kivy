@@ -13,7 +13,7 @@ from kivy.core.window import Window
 from kivy.app import App
 import sqlite3
 import re
-from DataBase_funcs import BancoDadosGrupos
+from DataBase_funcs import BancoDadosGrupos, BancoDadosMsg
 
 
 # -------- CÓDIGO PRINCIPAL --------
@@ -36,8 +36,8 @@ def check(email):
 
     return valid
 
-msg = [] # Lista de mensagens do grupo
 idLogado = 0 # Id será armazenado para acessar os grupos e informações relacionados a ele
+idGrupoChat = 0
 avisopop = ''
 
 # -------- RECYCLE VIEW --------
@@ -50,8 +50,14 @@ class LinhaSearch(BoxLayout):
         db = BancoDadosGrupos()
         GrupoList = db.listarGruposPorId(self.idGrupo)
         App.get_running_app().registro_atual = GrupoList
-        
-        print(self.idGrupo)
+        App.get_running_app().route.transition.direction = 'left'
+        App.get_running_app().route.current = 'entrar'
+
+        global idGrupoChat
+        idGrupoChat = self.idGrupo
+
+        global nome_sala
+        nome_sala = self.nome_group
 
 class LinhaHomePage(BoxLayout):
     nome_group = kvProps.StringProperty('')
@@ -61,8 +67,14 @@ class LinhaHomePage(BoxLayout):
         db = BancoDadosGrupos()
         GrupoList = db.listarGruposPorId(self.idGrupo)
         App.get_running_app().registro_atual = GrupoList
+        App.get_running_app().route.transition.direction = 'left'
+        App.get_running_app().route.current = 'chat'
 
-        print(self.idGrupo)
+        global idGrupoChat
+        idGrupoChat = self.idGrupo
+
+class LinhaChat(BoxLayout):
+    mensagem = kvProps.StringProperty('')
 
 # -------- TELA LOGIN --------
 class LoginPage(Screen):
@@ -279,11 +291,40 @@ class ChatPage(Screen):
         super().__init__(**kwargs)
 
     def exit_chat(self):
+        # Reinicia o id do chat que irá aparecer as mensagens
+        global idGrupoChat
+        idGrupoChat = None
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
+    #Carrega as mensagens do chat aberto
+    def load_message(self):
+        db = BancoDadosMsg()
+        mensagens = db.ReceberMensagem(idGrupoChat)
+        self.ids.listagemchat.data = list()
+        if mensagens != None:
+            for m in mensagens:
+                self.ids.listagemchat.data.append({'mensagem': m.mensagem})
+        else:
+            None
+
+    # Carrega e envia uma nova mensagem pra aquele grupo específico
     def send_message(self):
-        pass
+        global idGrupoChat
+
+        mensagem = self.ids.new_message.text
+        db = BancoDadosMsg()
+
+        db.EnviarMensagem(mensagem, idGrupoChat)
+        mensagens = db.ReceberMensagem(idGrupoChat)
+        self.ids.listagemchat.data = list()
+        if mensagens != None:
+            for m in mensagens:
+                self.ids.listagemchat.data.append({'mensagem': m.mensagem})
+        else:
+            None
+        
+        self.ids.new_message.text = ''
 
 # -------- CRIAR GRUPO --------
 
@@ -378,6 +419,34 @@ class SearchPage(Screen):
         else:
             None
 
+class JoinPage(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+    
+    def entrar_sim(self):
+        pass
+    
+    def load_message(self):
+        global nome_sala
+        self.ids.nome_da_sala.text = nome_sala
+
+        global idGrupoChat
+
+        db = BancoDadosMsg()
+        mensagens = db.ReceberMensagem(idGrupoChat)
+        self.ids.listagemchat.data = list()
+
+        if mensagens != None:
+            for m in mensagens:
+                self.ids.listagemchat.data.append({'mensagem': m.mensagem})
+        else:
+            None
+
+    def entrar_nao(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'search'
+    
+
 # -------- POPUP DE AVISOS ---------
 
 class WarningPopup(Popup):
@@ -385,22 +454,22 @@ class WarningPopup(Popup):
 
 # -------- CONSTRUINDO APP --------
 
-
 class GjoinApp(App):
     def build(self):
         # Tamanho da tela
         Window.size = (400, 600)
-        route = ScreenManager()
+        self.route = ScreenManager()
         # Rotas do aplicativo
-        route.add_widget(LoginPage(name='login'))
-        route.add_widget(RegisterPage(name='register'))
-        route.add_widget(HomePage(name='home'))
-        route.add_widget(ChatPage(name='chat'))
-        route.add_widget(CreatePage(name='create'))
-        route.add_widget(SearchPage(name = 'search'))
+        self.route.add_widget(LoginPage(name='login'))
+        self.route.add_widget(RegisterPage(name='register'))
+        self.route.add_widget(HomePage(name='home'))
+        self.route.add_widget(ChatPage(name='chat'))
+        self.route.add_widget(CreatePage(name='create'))
+        self.route.add_widget(SearchPage(name= 'search'))
+        self.route.add_widget(JoinPage(name= 'entrar'))
         # Nome do app
         self.title = 'GJoin - Aplicativo de Chat'
-        return route
+        return self.route
 
 # -------- INICIANDO APP --------
 

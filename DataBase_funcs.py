@@ -18,6 +18,13 @@ class User:
         self.universidade = universidade
         self.curso = curso
 
+class Message:
+    def __init__(self, idMsg, idGrupo, mensagem):
+        self.idMsg = idMsg
+        self.idGrupo = idGrupo
+        self.mensagem = mensagem
+
+# Manipulação do banco de dados dos grupos
 class BancoDadosGrupos:
     def listarGruposPorNome(self, parteNome):
         conn = sqlite3.connect('BANCO.db')
@@ -76,3 +83,39 @@ class BancoDadosGrupos:
             return result
         else: 
             return None
+
+class BancoDadosMsg:
+    def EnviarMensagem(self, mensagem, idGrupo):
+        conn = sqlite3.connect('BANCO.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+        INSERT INTO msgdb(idMsg, idGrupo, mensagem)
+        VALUES (NULL,?,?)
+        ''', (idGrupo, mensagem)
+        )
+        conn.commit()
+        conn.close()
+    
+    def ReceberMensagem(self, idGrupo):
+        conn = sqlite3.connect('BANCO.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+        SELECT * FROM msgdb
+        WHERE idGrupo = {}
+        '''.format(idGrupo)
+        )
+        
+        result = list()
+
+        for registro in cursor.fetchall():
+            result.append(Message(registro[0], registro[1], registro[2]))
+
+        conn.close()
+
+        if result != []:
+            return result
+        else: 
+            return None
+    

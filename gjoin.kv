@@ -12,6 +12,12 @@
         font_size: 20
         on_release: root.go_chat()
 
+<LinhaChat>
+    spacing: 5
+    Label:
+        text: root.mensagem
+        font_size: 20
+
 <WarningPopup>:
     id: pop
     size_hint: .7, .3
@@ -366,6 +372,7 @@
             on_release: root.criar_grupo()
 
 <ChatPage>:
+    on_enter: root.load_message()
     orientation: 'vertical'
 
     Widget:
@@ -409,16 +416,22 @@
                 size_hint_y:None
                 height: 425
                 width: 377
-                ScrollView:
-                    BoxLayout:
-                        orientation: 'vertical'
-                        id: chat_de_texto
+                RecycleView:
+                    id: listagemchat
+                    viewclass: 'LinhaChat'
+                    RecycleBoxLayout:
+                        padding: 2.5
+                        spacing: 5
+                        default_size: None, dp(35)
+                        default_size_hint: 1, None
                         size_hint_y: None
                         height: self.minimum_height
+                        orientation: 'vertical'
             BoxLayout:
                 Widget:
                     TextInput:
                         id: new_message
+                        text: ''
                         multiline: False
                         padding: [10, 0.5*(self.height - self.line_height)]
                         font_size: 20
@@ -484,7 +497,77 @@
                 size_hint_y: None
                 height: self.minimum_height
                 orientation: 'vertical'
+<JoinPage>
+    on_enter: root.load_message()
+    orientation: 'vertical'
 
+    Widget:
+        canvas:
+            Color:
+                rgba: [192, 192, 192, 0.97]
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 5
+        padding: 1
+        BoxLayout:
+            height: 30
+            size_hint_y: None
+            Widget:
+                Label:
+                    id: nome_da_sala
+                    text: ''
+                    color: (0,0,0,1)
+                    pos: (0, 565)
+                    size: (400, 25)
+                    font_size: 24
+        BoxLayout:
+            orientation: 'vertical'
+            Widget:
+                canvas:
+                    Color:
+                        rgba: [0,0,0,0.4]
+                    Rectangle:
+                        size: (380, 490)
+                        pos: 10, 55
+            BoxLayout:
+                size_hint_x:None
+                size_hint_y:None
+                height: 425
+                width: 377
+                RecycleView:
+                    id: listagemchat
+                    viewclass: 'LinhaChat'
+                    RecycleBoxLayout:
+                        padding: 2.5
+                        spacing: 5
+                        default_size: None, dp(35)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+            BoxLayout:
+                Widget:
+                    Label:
+                        text: 'Deseja entrar no grupo?'
+                        font_size: 20
+                        color: (0,0,0,1)
+                        pos: 25, 10
+                        size: 200, 35
+                Widget:
+                    Button:
+                        text: 'Sim'
+                        size: 60, 25
+                        pos: 255, 15
+                        on_release: root.entrar_sim()
+                Widget:
+                    Button:
+                        text: 'Nao'
+                        size: 60, 25
+                        pos: 325, 15
+                        on_release: root.entrar_nao()
 
 
 
