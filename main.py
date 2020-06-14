@@ -13,7 +13,7 @@ from kivy.core.window import Window
 from kivy.app import App
 import sqlite3
 import re
-from DataBase_funcs import BancoDadosGrupos, BancoDadosMsg
+from DataBase_funcs import BancoDadosGrupos, BancoDadosMsg, BancoDadosRelacoes
 
 
 # -------- CÓDIGO PRINCIPAL --------
@@ -258,7 +258,7 @@ class HomePage(Screen):
         global idLogado
 
         #Recycle View criando os botões do grupo
-        db = BancoDadosGrupos()
+        db = BancoDadosRelacoes()
         grupos = db.listarGruposLogado(idLogado)
         self.ids.listagemhome.data = list()
         if grupos != None:
@@ -337,6 +337,8 @@ class CreatePage(Screen):
         self.manager.current = 'home'
 
     def criar_grupo(self):
+        global avisopop
+        global idLogado
         # ------ VARIAVEIS PARA A VERIFICAÇÃO -------
         self.nomeGrupo = self.ids.nome_novo_grupo.text
         self.faculGrupo = self.ids.faculdade_novo_grupo.text
@@ -344,17 +346,12 @@ class CreatePage(Screen):
         self.horGrupo = self.ids.horario_novo_grupo.text
         # Caso esteja tudo preenchido
         if (self.nomeGrupo and self.faculGrupo and self.matGrupo and self.horGrupo) != '':
-            # Chama as variáveis globais para a função
-            global avisopop
-            global idLogado
-
             # Armazena as informações inseridas no banco de dados
-            conn = sqlite3.connect('BANCO.db')
-            cursor = conn.cursor()
-            cursor.execute('''INSERT INTO groupsdb VALUES(NULL, ?, ?, ?, ?, ?)''', 
-            (self.nomeGrupo, self.faculGrupo, self.matGrupo, self.horGrupo, idLogado))
-            conn.commit()
-            conn.close()
+            dbg = BancoDadosGrupos()
+            dbg.criarNovoGrupo(self.nomeGrupo, self.faculGrupo, self.matGrupo, self.horGrupo, idLogado)
+            
+            dbr = BancoDadosRelacoes()
+            dbr.NovaRelacao(idLogado)
 
             # Retorna para a home page
             self.manager.transition.direction = 'right'
@@ -423,9 +420,6 @@ class JoinPage(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
     
-    def entrar_sim(self):
-        pass
-    
     def load_message(self):
         global nome_sala
         self.ids.nome_da_sala.text = nome_sala
@@ -442,11 +436,20 @@ class JoinPage(Screen):
         else:
             None
 
+    def entrar_sim(self):
+        global idLogado
+        global idGrupoChat
+
+        dbr = BancoDadosRelacoes()
+        dbr.EntrarGrupo(idGrupoChat, idLogado)
+        
+        self.manager.transition.direction = 'right'
+        self.manager.current = 'home'
+
     def entrar_nao(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'search'
     
-
 # -------- POPUP DE AVISOS ---------
 
 class WarningPopup(Popup):
