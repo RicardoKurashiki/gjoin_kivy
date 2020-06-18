@@ -1,3 +1,8 @@
+# ---------- ACABO O TRABALHO --------------
+# AGRADEÇO DE CORAÇÃO A PARTICIPAÇÃO DE TODOS
+# ESPECIALMENTE DE CADU QUE CARREGO ESSE TRABALHOS NAS COSTAS
+
+
 from kivy.config import Config
 # Fixar tamanho
 Config.set('graphics', 'resizable', False)
