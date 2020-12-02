@@ -1,14 +1,16 @@
 <LinhaSearch>
     spacing: 5
-    Button:
+    SmoothButton:
         text: root.nome_group
+        back_color: (0.255, 0.412, 1.0, 1.0)
         font_size: 20
         on_release: root.clique()
 
 <LinhaHomePage>
     spacing: 5
-    Button:
+    SmoothButton:
         text:root.nome_group
+        back_color: (0.255, 0.412, 1.0, 1.0)
         font_size: 20
         on_release: root.go_chat()
 
@@ -48,58 +50,48 @@
                 Color:
                     rgba: [1,1,1,0.9]
                 Rectangle:
-                    pos: (137.5, 445)
+                    pos: (137.5, 415)
                     size: (125, 125)
                     source: root.imagem_app
         BoxLayout:
             orientation: 'vertical'
             Widget:
-                Label:
-                    text: 'E-mail'
-                    font_size: 24
-                    color: (0,0,0,1)
-                    size: 75, 50
-                    pos: 25, 345
-            Widget:
                 TextInput:
                     id: log_email
                     padding: [10, 0.5*(self.height - self.line_height)]
                     font_size: 16
+                    hint_text: 'E-mail'
                     multiline: False
                     size: 350, 50
                     pos: 25, 300
                     size_hint: 0.5, None
             Widget:
-                Label:
-                    text: 'Senha'
-                    font_size: 24
-                    color: (0,0,0,1)
-                    size: 75, 50
-                    pos: 25, 240
-            Widget:
                 TextInput:
                     id: log_pass
                     password: True
                     padding: [10, 0.5*(self.height - self.line_height)]
+                    hint_text: 'Senha'
                     font_size: 16
                     multiline: False
                     size: 350, 50
-                    pos: 25, 195
+                    pos: 25, 225
                     size_hint: 0.5, None
             Widget:        
-                Button:
+                SmoothButton:
                     id: login
                     text: 'Login'
                     size_hint: (None, None)
                     size: 167.5, 40
                     pos: 25, 25
+                    back_color: (0.157, 0.455, 0.753, 1.0)
                     on_release: root.login()
             Widget:
-                Button:
+                SmoothButton:
                     text: 'Cadastrar'
                     size_hint: (None, None)
                     size: 167.5, 40
                     pos: 207.5, 25
+                    back_color: (0.157, 0.455, 0.753, 1.0)
                     on_release: root.go_register()
 
 <RegisterPage>:
@@ -113,117 +105,84 @@
     BoxLayout:
         orientation: 'vertical'
         Widget:
-            Label:
-                text: 'Nome completo'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 47.5, 550
-        Widget:
             TextInput:
                 id: reg_name
                 text: ''
+                hint_text: 'Nome completo'
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 525
-        Widget:
-            Label:
-                text: 'E-mail'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 5, 475
         Widget:
             TextInput:
                 id: reg_email
                 text: ''
+                hint_text: 'E-mail'
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 450
         Widget:
-            Label:
-                text: 'Universidade'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 34.5, 400
             TextInput:
                 id: reg_univ
                 text: ''
+                hint_text: 'Universidade'
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 375
-        Widget:
-            Label:
-                text: 'Curso'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 2.5, 325
         Widget:
             TextInput:
                 id: reg_curso
                 text: ''
+                hint_text: 'Curso'
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 300
-        Widget:
-            Label:
-                text: 'Senha'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 4.5, 250
         Widget:
             TextInput:
                 id: reg_pass
                 text: ''
+                hint_text: 'Senha'
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 225
-        Widget:
-            Label:
-                text: 'Confirmar Senha'
-                font_size: 20
-                color: (0,0,0,1)
-                size: self.width, 50
-                pos: 52.5, 175
         Widget:
             TextInput:
                 id: reg_confirmPass
                 text: ''
+                hint_text: 'Confirmar Senha'
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
                 font_size: 15
                 multiline: False
-                size: 350, 30
+                size: 350, 50
                 pos: 25, 150
         Widget:
-            Button:
+            SmoothButton:
                 id: register
                 text: 'Registrar'
                 size_hint: (None, None)
                 size: 167.5, 40
                 pos: 25, 25
+                back_color: (0.157, 0.455, 0.753, 1.0)
                 on_release: root.register_account()
         Widget:
-            Button:
+            StrokeButton:
                 id: reg_cancel
                 text: 'Cancelar'
                 size_hint: (None, None)
                 size: 167.5, 40
                 pos: 207.5, 25
+                back_color: (0.157, 0.455, 0.753, 1.0)
                 on_release: root.cancel_register()
 
 <HomePage>: 
@@ -250,22 +209,25 @@
                         size:(35,35)
                         source: root.imagem_app
             Widget:
-                Button:
+                SmoothOption:
                     pos: (50,555)
                     id: criar_gp
                     text: "Novo Grupo"
+                    back_color: (0.157, 0.455, 0.753, 1.0)
                     on_release: root.go_to_create()
                     size: (130, 35)
-                Button:
+                SmoothOption:
                     pos: (185, 555)
                     text: "Buscar"
                     id: search
+                    back_color: (0.157, 0.455, 0.753, 1.0)
                     on_release: root.go_to_search()
                     size: (100, 35)
-                Button:
+                RoundedButton:
                     pos:(290,555)
                     id: logout
                     text: "Logout"
+                    back_color: (0.157, 0.455, 0.753, 1.0)
                     size: (100, 35)
                     on_release: root.go_back()
             Widget:
@@ -286,6 +248,21 @@
                 size_hint_y: None
                 height: self.minimum_height
                 orientation: 'vertical'
+                Widget:
+                    background_color: (0,0,0,0)
+                    background_normal: ''
+                    back_color: (1,0,1,1)
+                    border_radius: [7]
+                    bold: True
+                    canvas.before:
+                        Color:
+                            rgba: self.back_color
+                        RoundedRectangle:
+                            size: self.size
+                            pos: self.pos 
+                            radius: self.border_radius
+                    back_color: (0.157, 0.455, 0.753, 1.0)
+
 <CreatePage>:
     Widget:
         canvas:
@@ -295,78 +272,63 @@
                 size: self.size
                 pos: self.pos
     Widget:
-        Button:
-            text: 'Voltar'
-            pos: (10, 565)
-            size: (60, 25)
-            on_release: root.voltar()
-    Widget:
         Label:
-            text: 'Nome do Grupo'
-            font_size: 24
+            text: 'Criacao de Grupo'
+            pos: 125, 460
+            size: (150, 50)
             color: (0, 0, 0, 1)
-            size: 75, 50
-            pos: 57.5, 465
+            font_size: 30
+    Widget:
+        RoundedButton:
+            text: 'Voltar'
+            back_color: (0.157, 0.455, 0.753, 1.0)
+            pos: (10, 565)
+            size: (100, 30)
+            on_release: root.voltar()
     Widget:
         TextInput:
             id: nome_novo_grupo
             text: ''
+            hint_text: 'Nome do Grupo'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 12
+            font_size: 17
             multiline: False
             size: 380, 40
-            pos: 10, 430
-    Widget:
-        Label:
-            text: 'Faculdade'
-            font_size: 24
-            color: (0, 0, 0, 1)
-            size: 85, 50
-            pos: 25, 380
+            pos: 10, 375
     Widget:
         TextInput:
             id: faculdade_novo_grupo
             text: ''
+            hint_text: 'Faculdade'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 12
+            font_size: 17
             multiline: False
             size: 380, 40
-            pos: 10, 345
-    Widget:
-        Label:
-            text: 'Disciplina'
-            font_size: 24
-            color: (0, 0, 0, 1)
-            size: 77.5, 50
-            pos: 25, 295
+            pos: 10, 320
     Widget:
         TextInput:
             id: materia_novo_grupo
             text: ''
+            hint_text: 'Disciplina'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 12
+            font_size: 17
             multiline: False
             size: 380, 40
-            pos: 10, 260
-    Widget:
-        Label:
-            text: 'Horario'
-            font_size: 24
-            color: (0, 0, 0, 1)
-            size: 52.5, 50
-            pos: 25, 210
+            pos: 10, 265
     Widget:
         TextInput:
             id: horario_novo_grupo
             text: ''
+            hint_text: 'Horario'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 12
+            font_size: 17
             multiline: False
             size: 380, 40
-            pos: 10, 175
+            pos: 10, 210
     Widget:
-        Button:
-            text: "Criar Grupo"
+        SmoothButton:
+            text: 'Criar Grupo'
+            back_color: (0.157, 0.455, 0.753, 1.0)
             size: 380, 55
             pos: 10, 20
             on_release: root.criar_grupo()
@@ -461,23 +423,25 @@
             height: 162.5
             size_hint_y: None
             Widget:
-                Button:
+                RoundedButton:
                     text: 'Voltar'
-                    pos: (10, 565)
-                    size: (60, 25)
+                    back_color: (0.157, 0.455, 0.753, 1.0)
+                    pos: (10, 555)
+                    size: (60, 35)
                     on_release: root.returnhome()
             Widget:
                 TextInput:
                     id: txBusca
                     font_size: 10
                     text: ''
-                    pos: (72.5, 565)
-                    size: (255, 25)
+                    pos: (77.5, 555)
+                    size: (242.5, 35)
             Widget:
-                Button:
+                SmoothOption:
                     text: 'Buscar'
-                    size: (60, 25)
-                    pos: (330, 565)
+                    back_color: (0.157, 0.455, 0.753, 1.0)
+                    size: (65, 36)
+                    pos: (325, 555)
                     on_release: root.pesquisa(txBusca)
             Widget:
                 Label:
@@ -569,6 +533,58 @@
                         pos: 325, 15
                         on_release: root.entrar_nao()
 
+<SmoothButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (1,0,1,1)
+    border_radius: [7]
+    bold: True
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos 
+            radius: self.border_radius
 
+<StrokeButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (1,0,1,1)
+    color: self.back_color
+    bold: True 
+    border_radius: 7
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 1.2
 
-            
+<SmoothOption@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (1,0,1,1)
+    border_radius: [18]
+    bold: True
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos 
+            radius: self.border_radius
+
+<RoundedButton@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (1,0,1,1)
+    color: self.back_color
+    bold: True 
+    border_radius: 18
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        Line:
+            rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
+            width: 1.2
