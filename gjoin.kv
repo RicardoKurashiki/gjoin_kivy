@@ -1,3 +1,5 @@
+#:import C kivy.utils.get_color_from_hex
+
 <LinhaSearch>
     spacing: 5
     SmoothButton:
@@ -56,25 +58,23 @@
         BoxLayout:
             orientation: 'vertical'
             Widget:
-                TextInput:
+                MyTextInput:
                     id: log_email
                     padding: [10, 0.5*(self.height - self.line_height)]
                     font_size: 16
                     hint_text: 'E-mail'
-                    multiline: False
-                    size: 350, 50
-                    pos: 25, 300
+                    size: 300, 50
+                    pos: 50, 300
                     size_hint: 0.5, None
             Widget:
-                TextInput:
+                MyTextInput:
                     id: log_pass
                     password: True
                     padding: [10, 0.5*(self.height - self.line_height)]
                     hint_text: 'Senha'
                     font_size: 16
-                    multiline: False
-                    size: 350, 50
-                    pos: 25, 225
+                    size: 300, 50
+                    pos: 50, 225
                     size_hint: 0.5, None
             Widget:        
                 SmoothButton:
@@ -93,7 +93,6 @@
                     pos: 207.5, 25
                     back_color: (0.157, 0.455, 0.753, 1.0)
                     on_release: root.go_register()
-
 <RegisterPage>:
     Widget:
         canvas:
@@ -105,67 +104,61 @@
     BoxLayout:
         orientation: 'vertical'
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_name
                 text: ''
                 hint_text: 'Nome completo'
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 525
+                font_size: 16
+                size: 300, 50
+                pos: 50, 525
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_email
                 text: ''
                 hint_text: 'E-mail'
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 450
+                font_size: 16
+                size: 300, 50
+                pos: 50, 450
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_univ
                 text: ''
                 hint_text: 'Universidade'
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 375
+                font_size: 16
+                size: 300, 50
+                pos: 50, 375
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_curso
                 text: ''
                 hint_text: 'Curso'
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 300
+                font_size: 16
+                size: 300, 50
+                pos: 50, 300
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_pass
                 text: ''
                 hint_text: 'Senha'
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 225
+                font_size: 16
+                size: 300, 50
+                pos: 50, 225
         Widget:
-            TextInput:
+            MyTextInput:
                 id: reg_confirmPass
                 text: ''
                 hint_text: 'Confirmar Senha'
                 password: True
                 padding: [10, 0.5*(self.height - self.line_height)]
-                font_size: 15
-                multiline: False
-                size: 350, 50
-                pos: 25, 150
+                font_size: 16
+                size: 300, 50
+                pos: 50, 150
         Widget:
             SmoothButton:
                 id: register
@@ -282,49 +275,45 @@
         RoundedButton:
             text: 'Voltar'
             back_color: (0.157, 0.455, 0.753, 1.0)
-            pos: (10, 565)
-            size: (100, 30)
+            pos: (10, 555)
+            size: (100, 35)
             on_release: root.voltar()
     Widget:
-        TextInput:
+        MyTextInput:
             id: nome_novo_grupo
             text: ''
             hint_text: 'Nome do Grupo'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 17
-            multiline: False
-            size: 380, 40
-            pos: 10, 375
+            font_size: 16
+            size: 300, 50
+            pos: 50, 375
     Widget:
-        TextInput:
+        MyTextInput:
             id: faculdade_novo_grupo
             text: ''
             hint_text: 'Faculdade'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 17
-            multiline: False
-            size: 380, 40
-            pos: 10, 320
+            font_size: 16
+            size: 300, 50
+            pos: 50, 300
     Widget:
-        TextInput:
+        MyTextInput:
             id: materia_novo_grupo
             text: ''
             hint_text: 'Disciplina'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 17
-            multiline: False
-            size: 380, 40
-            pos: 10, 265
+            font_size: 16
+            size: 300, 50
+            pos: 50, 225
     Widget:
-        TextInput:
+        MyTextInput:
             id: horario_novo_grupo
             text: ''
             hint_text: 'Horario'
             padding: [10, 0.5*(self.height - self.line_height)]
-            font_size: 17
-            multiline: False
-            size: 380, 40
-            pos: 10, 210
+            font_size: 16
+            size: 300, 50
+            pos: 50, 150
     Widget:
         SmoothButton:
             text: 'Criar Grupo'
@@ -336,7 +325,6 @@
 <ChatPage>:
     on_enter: root.load_message()
     orientation: 'vertical'
-
     Widget:
         canvas:
             Color:
@@ -352,27 +340,30 @@
             height: 30
             size_hint_y: None
             Widget:
-                Button:
+                RoundedButton:
                     text: 'Voltar'
-                    pos: (10, 565)
-                    size: (60, 25)
+                    back_color: (0.157, 0.455, 0.753, 1.0)
+                    pos: (10, 555)
+                    size: (70, 35)
                     on_release: root.exit_chat()
             Widget:
                 Label:
                     text: 'Sala de Chat'
                     color: (0,0,0,1)
-                    pos: (0, 565)
+                    pos: (0, 560)
                     size: (400, 25)
                     font_size: 24
         BoxLayout:
             orientation: 'vertical'
+            border_radius: 12
             Widget:
                 canvas:
                     Color:
-                        rgba: [0,0,0,0.4]
-                    Rectangle:
+                        rgba: (0.157, 0.455, 0.753, 1)
+                    RoundedRectangle:
                         size: (380, 490)
                         pos: 10, 55
+                        radius: self.border_radius
             BoxLayout:
                 size_hint_x:None
                 size_hint_y:None
@@ -391,17 +382,18 @@
                         orientation: 'vertical'
             BoxLayout:
                 Widget:
-                    TextInput:
+                    MyTextInput:
                         id: new_message
                         text: ''
-                        multiline: False
                         padding: [10, 0.5*(self.height - self.line_height)]
-                        font_size: 20
-                        pos: 10, 10
-                        size: 325, 35
+                        font_size: 16
+                        pos: 27, 10
+                        size: 290, 35
                 Widget:
-                    Button:
+                    SmoothOption:
                         text: '>'
+                        font_size: 16
+                        back_color: (0.157, 0.455, 0.753, 1.0)
                         size: 50, 35
                         pos: 340, 10
                         on_release: root.send_message()
@@ -430,12 +422,13 @@
                     size: (60, 35)
                     on_release: root.returnhome()
             Widget:
-                TextInput:
+                MyTextInput:
                     id: txBusca
-                    font_size: 10
+                    hint_text: 'Nome do grupo'
+                    font_size: 16
                     text: ''
-                    pos: (77.5, 555)
-                    size: (242.5, 35)
+                    pos: (95, 555)
+                    size: (206, 35)
             Widget:
                 SmoothOption:
                     text: 'Buscar'
@@ -489,13 +482,15 @@
                     font_size: 24
         BoxLayout:
             orientation: 'vertical'
+            border_radius: 12
             Widget:
                 canvas:
                     Color:
-                        rgba: [0,0,0,0.4]
-                    Rectangle:
+                        rgba: (0.157, 0.455, 0.753, 1)
+                    RoundedRectangle:
                         size: (380, 490)
                         pos: 10, 55
+                        radius: self.border_radius
             BoxLayout:
                 size_hint_x:None
                 size_hint_y:None
@@ -521,14 +516,16 @@
                         pos: 25, 10
                         size: 200, 35
                 Widget:
-                    Button:
+                    SmallOption:
                         text: 'Sim'
                         size: 60, 25
+                        back_color: (0.157, 0.455, 0.753, 1.0)
                         pos: 255, 15
                         on_release: root.entrar_sim()
                 Widget:
-                    Button:
+                    SmallOption:
                         text: 'Nao'
+                        back_color: (0.157, 0.455, 0.753, 1.0)
                         size: 60, 25
                         pos: 325, 15
                         on_release: root.entrar_nao()
@@ -588,3 +585,46 @@
         Line:
             rounded_rectangle: (self.pos[0], self.pos[1], self.size[0], self.size[1], self.border_radius)
             width: 1.2
+
+<MyTextInput@TextInput>:
+    multiline: False
+    background_color: 1,1,1,0
+    padding: [10, 0.4*(self.height - self.line_height)]
+    cursor_color: C('#000000')
+    canvas.after:
+        Color:
+            rgba: [1,1,1,0]
+        Ellipse:
+            angle_start:180
+            angle_end:360
+            pos:(self.pos[0] - self.size[1]/2.0, self.pos[1])
+            size: (self.size[1], self.size[1])
+        Ellipse:
+            angle_start:360
+            angle_end:540
+            pos: (self.size[0] + self.pos[0] - self.size[1]/2.0, self.pos[1])
+            size: (self.size[1], self.size[1])
+        Color:
+            rgba: C('#6e6e6e')
+        Line:
+            points: self.pos[0] , self.pos[1], self.pos[0] + self.size[0], self.pos[1]
+        Line:
+            points: self.pos[0], self.pos[1] + self.size[1], self.pos[0] + self.size[0], self.pos[1] + self.size[1]
+        Line:
+            ellipse: self.pos[0] - self.size[1]/2.0, self.pos[1], self.size[1], self.size[1], 180, 360
+        Line:
+            ellipse: self.size[0] + self.pos[0] - self.size[1]/2.0, self.pos[1], self.size[1], self.size[1], 360, 540
+        
+<SmallOption@Button>:
+    background_color: (0,0,0,0)
+    background_normal: ''
+    back_color: (1,0,1,1)
+    border_radius: [10]
+    bold: True
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos 
+            radius: self.border_radius
